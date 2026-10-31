@@ -664,3 +664,70 @@
     color: var(--wlTextMuted);
     cursor: default;
 }
+
+/* ---- "Show all" link in the overview ---- */
+.wlSectionHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+.wlMore {
+    font: inherit;
+    font-size: .95em;
+    color: var(--wlAccent);
+    background: none;
+    border: 0;
+    padding: .2em .4em;
+    border-radius: var(--wlRadiusSmall);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: .1em;
+}
+
+.wlMore:hover,
+.wlMore:focus-visible {
+    background: var(--wlSurface);
+    outline: none;
+}
+
+.wlMore .wlChevron {
+    font-size: 1.2em;
+}
+
+/* Overview ("All"): one horizontal row per category/group, like Jellyfin's favorites rows */
+.wlGrid.wlRow {
+    display: flex;
+    gap: .8em;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    padding: 4px 4px .6em;
+    margin: -4px -4px 0;
+    scrollbar-width: thin;
+}
+
+.wlGrid.wlRow > .wlCard {
+    flex: 0 0 auto;
+    width: 150px;
+    scroll-snap-align: start;
+}
+
+@media (min-width: 1500px) {
+    .wlGrid.wlRow > .wlCard {
+        width: 165px;
+    }
+}
+
+@media (max-width: 600px) {
+    .wlGrid.wlRow > .wlCard {
+        width: 110px;
+    }
+}
+
+.layout-tv .wlGrid.wlRow > .wlCard {
+    width: 190px;
+}

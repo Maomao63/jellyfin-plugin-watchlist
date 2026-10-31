@@ -17,10 +17,12 @@ Query parameters:
 | Parameter | Values |
 | --- | --- |
 | `theme` | `dark`, `light`, `appletv`, `purplehaze`, `elegantfin` |
-| `mode` | `home`, `tab`, `manage`, `dialog`, `details`, `collapse`, `legacyback`, `modernnav`, `modernfav` |
+| `mode` | `home`, `tab`, `manage`, `dialog`, `details`, `collapse`, `showall`, `legacyback`, `modernnav`, `modernfav` |
 | `modern=1` | Modern layout top bar, legacy header hidden (`noskin=1`: legacy header removed) |
 | `lang=de` | German UI |
 | `demo=1` | Fictional demo titles and generated posters (used for the README screenshots) |
+| `many=1` | Many items (checks the 8-item overview limit) |
+| `sort=title` | Preset sort order |
 | `notrans=1` | Disable CSS transitions (headless browsers may capture them mid-way) |
 
 `shot.sh` prints a JSON result (tab injected, bookmark buttons, visible tab content, nav links) and saves a

@@ -51,7 +51,8 @@
             movies: 'Movies',
             shows: 'Series',
             other: 'Other',
-            defaultLocked: 'The default category cannot be renamed or deleted.'
+            defaultLocked: 'The default category cannot be renamed or deleted.',
+            showAll: 'Show all'
         },
         de: {
             tab: 'Merkliste',
@@ -94,7 +95,8 @@
             movies: 'Filme',
             shows: 'Serien',
             other: 'Sonstiges',
-            defaultLocked: 'Die Standardkategorie kann nicht umbenannt oder gelöscht werden.'
+            defaultLocked: 'Die Standardkategorie kann nicht umbenannt oder gelöscht werden.',
+            showAll: 'Alle anzeigen'
         }
     };
 
@@ -784,20 +786,31 @@
         return 'other';
     }
 
-    function gridHtml(cat, entries, items) {
-        return '<div class="wlGrid">' + entries.map(function (e) { return cardHtml(items.get(normId(e.itemId)), cat); }).join('') + '</div>';
+    function gridHtml(cat, entries, items, row) {
+        return '<div class="wlGrid' + (row ? ' wlRow' : '') + '">' + entries.map(function (e) { return cardHtml(items.get(normId(e.itemId)), cat); }).join('') + '</div>';
     }
 
-    function entriesHtml(cat, entries, items) {
-        if (!cat.isDefault) return gridHtml(cat, entries, items);
+    // "All" overview: only the most recently added items per category (per group in the default category)
+    var PREVIEW_LIMIT = 8;
+
+    // Picks the most recently added entries but keeps the order chosen in the sort menu
+    function latest(entries, limit) {
+        if (!limit || entries.length <= limit) return entries;
+        var keep = new Set(entries.slice().sort(function (a, b) { return a.addedAt > b.addedAt ? -1 : 1; }).slice(0, limit));
+        return entries.filter(function (e) { return keep.has(e); });
+    }
+
+    function entriesHtml(cat, entries, items, limit) {
+        if (!cat.isDefault) return gridHtml(cat, latest(entries, limit), items, !!limit);
         var collapsed = prefs.collapsed || {};
         return GROUPS.map(function (g) {
-            var list = entries.filter(function (e) { return groupOf(items.get(normId(e.itemId))) === g.key; });
-            if (!list.length) return '';
+            var all = entries.filter(function (e) { return groupOf(items.get(normId(e.itemId))) === g.key; });
+            if (!all.length) return '';
+            var list = latest(all, limit);
             return '<details class="wlGroup" data-wl-group="' + g.key + '"' + (collapsed[g.key] ? '' : ' open') + '>' +
                 '<summary class="wlGroupTitle"><span class="material-icons wlChevron" aria-hidden="true"></span>' +
-                esc(t(g.label)) + ' <span class="wlGroupCount">' + list.length + '</span></summary>' +
-                gridHtml(cat, list, items) +
+                esc(t(g.label)) + ' <span class="wlGroupCount">' + all.length + '</span></summary>' +
+                gridHtml(cat, list, items, !!limit) +
                 '</details>';
         }).join('');
     }
@@ -842,10 +855,16 @@
         } else if (state.filter === 'all') {
             body = cats.map(function (cat) {
                 var entries = visibleEntries(cat, items);
+                var truncated = cat.isDefault
+                    ? GROUPS.some(function (g) { return entries.filter(function (e) { return groupOf(items.get(normId(e.itemId))) === g.key; }).length > PREVIEW_LIMIT; })
+                    : entries.length > PREVIEW_LIMIT;
+                var more = truncated
+                    ? '<button type="button" class="wlMore" data-wl-filter="' + esc(cat.id) + '">' + esc(t('showAll')) + ' (' + entries.length + ')<span class="material-icons wlChevron" aria-hidden="true"></span></button>'
+                    : '';
                 return '<section class="wlSection">' +
-                    '<h2 class="wlSectionTitle"><button type="button" data-wl-filter="' + esc(cat.id) + '">' + esc(catName(cat)) + '</button> <span>' + entries.length + '</span></h2>' +
+                    '<div class="wlSectionHead"><h2 class="wlSectionTitle"><button type="button" data-wl-filter="' + esc(cat.id) + '">' + esc(catName(cat)) + '</button> <span>' + entries.length + '</span></h2>' + more + '</div>' +
                     (entries.length
-                        ? entriesHtml(cat, entries, items)
+                        ? entriesHtml(cat, entries, items, PREVIEW_LIMIT)
                         : '<div class="wlEmptySmall">' + esc(t('emptySection')) + '</div>') +
                     '</section>';
             }).join('');

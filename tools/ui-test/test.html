@@ -14,6 +14,7 @@
   var THEME = P.get('theme') || 'dark';
   var MODE = P.get('mode') || 'home';
   if (P.get('lang')) document.documentElement.lang = P.get('lang');
+  if (P.get('sort')) try { localStorage.setItem('watchlist-prefs', JSON.stringify({ sort: P.get('sort') })); } catch (e) {}
   var base = THEME === 'elegantfin' ? 'dark' : THEME;
   document.write('<link rel="stylesheet" href="themes/' + base + '/theme.css">');
   if (THEME === 'elegantfin') document.write('<link rel="stylesheet" href="elegantfin.css">');
@@ -148,6 +149,17 @@
     { id: 'c-2', name: 'Anime', items: [{ itemId: 'b2', addedAt: '2026-10-31T09:00:00Z' }, { itemId: 'e5', addedAt: '2026-10-31T08:00:00Z' }] },
     { id: 'c-3', name: 'Movie night', items: [] }
   ] };
+  // many=1: lots of items to check the "All" preview limit
+  if (P.get('many')) {
+    for (var n = 0; n < 14; n++) {
+      ITEMS['x' + n] = { Id: 'x' + n, Type: 'Movie', Name: 'Movie ' + n, ProductionYear: 2000 + n, ImageTags: { Primary: 'x' }, UserData: { Played: false } };
+      LIST.categories[0].items.push({ itemId: 'x' + n, addedAt: '2026-11-01T' + String(10 + n).padStart(2, '0') + ':00:00Z' });
+    }
+    for (var k = 0; k < 11; k++) {
+      ITEMS['y' + k] = { Id: 'y' + k, Type: 'Series', Name: 'Show ' + k, ProductionYear: 2010 + k, ImageTags: { Primary: 'x' }, UserData: { Played: false } };
+      LIST.categories[1].items.push({ itemId: 'y' + k, addedAt: '2026-11-02T' + String(10 + k).padStart(2, '0') + ':00:00Z' });
+    }
+  }
   window.ApiClient = {
     accessToken: function () { return 't'; },
     getCurrentUserId: function () { return 'u1'; },
@@ -196,6 +208,9 @@
       if (MODE === 'manage') setTimeout(function () { document.querySelector('[data-wl-action=manage]').click(); }, 400);
     } else if (MODE === 'dialog') {
       document.querySelector('.btnUserRating + .wlBookmarkBtn').click();
+    } else if (MODE === 'showall') {
+      document.querySelector('.wlTabButton').click();
+      setTimeout(function () { document.querySelector('.wlMore').click(); }, 500);
     } else if (MODE === 'collapse') {
       document.querySelector('.wlTabButton').click();
       setTimeout(function () { document.querySelector('[data-wl-group="movies"] > summary').click(); }, 500);
@@ -230,6 +245,9 @@
       active: Array.from(document.querySelectorAll('.wlBookmarkBtn.wlActive')).map(function (b) { return b.getAttribute('data-wl-id'); }),
       visibleTabs: Array.from(document.querySelectorAll('#indexPage > .tabContent')).filter(function (t) { return getComputedStyle(t).display !== 'none'; }).map(function (t) { return t.id || t.className; }),
       light: document.documentElement.classList.contains('wl-light'),
+      more: Array.from(document.querySelectorAll('.wlMore')).map(function (m) { return m.textContent.trim(); }),
+      sections: Array.from(document.querySelectorAll('.wlSection')).map(function (sec) { return sec.querySelector('.wlSectionTitle button').textContent + ':' + sec.querySelectorAll('.wlCard').length; }),
+      firstCards: Array.from(document.querySelectorAll('.wlSection:first-of-type .wlGroup[data-wl-group=movies] .wlCardTitle')).slice(0, 3).map(function (c) { return c.textContent; }),
       groups: Array.from(document.querySelectorAll('.wlGroup')).map(function (g) { return g.getAttribute('data-wl-group') + ':' + g.querySelectorAll('.wlCard').length + (g.open ? ':open' : ':closed'); }),
       prefs: (function () { try { return JSON.parse(localStorage.getItem('watchlist-prefs') || '{}').collapsed; } catch (e) { return null; } })(),
       navLinks: Array.from(document.querySelectorAll('.wlNavLink')).map(function (l) { return l.textContent.trim() + '|' + l.getAttribute('href') + (l.classList.contains('wlNavLink-active') ? '|active' : ''); })
