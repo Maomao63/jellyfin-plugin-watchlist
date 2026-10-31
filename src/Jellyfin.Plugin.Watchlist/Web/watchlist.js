@@ -106,7 +106,8 @@
         loading: null,
         filter: 'all',
         manage: false,
-        lastPopstate: 0
+        lastPopstate: 0,
+        urlOpened: null
     };
 
     var prefs = loadPrefs();
@@ -449,20 +450,23 @@
     // ---------- Home screen tab ----------
 
     function homeActive() {
-        var header = document.querySelector('.skinHeader');
         var page = document.querySelector('#indexPage');
-        // The home page only sets this class while it is active.
-        return header && header.classList.contains('noHomeButtonHeader') && page && !page.classList.contains('hide') ? page : null;
+        if (!page || page.classList.contains('hide')) return null;
+        // The home page sets this class on the (in the Modern layout hidden) legacy header while it is active.
+        var header = document.querySelector('.skinHeader');
+        if (header && header.classList.contains('noHomeButtonHeader')) return page;
+        // Fallback: decide by the URL
+        return /^#\/home(\.html)?(\?|$)/.test(location.hash) ? page : null;
     }
 
     function ensureTab() {
         var page = homeActive();
         if (!page) return;
-        var slider = document.querySelector('.skinHeader .headerTabs .emby-tabs-slider');
-        if (!slider) return;
-
         var content = ensureContent(page);
         if (!content) return;
+
+        var slider = document.querySelector('.skinHeader .headerTabs .emby-tabs-slider');
+        if (!slider) return;
 
         var own = slider.querySelector('.wlTabButton');
         if (content.classList.contains('is-active') && !(own && own.classList.contains('emby-tab-button-active'))) {
@@ -519,17 +523,127 @@
         var page = homeActive();
         var content = page && page.querySelector('.wlTabContent');
         var btn = document.querySelector('.wlTabButton');
-        if (!content || !btn) return;
+        if (!content) return;
 
-        btn.parentNode.querySelectorAll('.emby-tab-button-active').forEach(function (b) {
-            b.classList.remove('emby-tab-button-active');
-        });
-        btn.classList.add('emby-tab-button-active');
+        if (btn) {
+            btn.parentNode.querySelectorAll('.emby-tab-button-active').forEach(function (b) {
+                b.classList.remove('emby-tab-button-active');
+            });
+            btn.classList.add('emby-tab-button-active');
+        }
         content.parentNode.querySelectorAll('.tabContent').forEach(function (tab) {
             tab.classList.toggle('is-active', tab === content);
         });
         session(SESSION_KEY, '1');
         renderTab(content);
+    }
+
+    // ---------- "Watchlist" link next to "Favorites" (Modern layout app bar, side menus) ----------
+    // The Modern layout of Jellyfin 12 has no visible home tab bar; Favorites is a link to #/home?tab=1.
+    // Our link points to #/home?tab=2, which opens the watchlist tab.
+
+    var BOOKMARK_PATH = 'M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z';
+    var BOOKMARK_FILLED_PATH = 'M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z';
+
+    function homeTabParam() {
+        var query = location.hash.split('?')[1] || '';
+        return new URLSearchParams(query).get('tab');
+    }
+
+    function isFavoritesLink(a) {
+        var href = a.getAttribute('href') || '';
+        return /(^|\/)home(\.html)?\?tab=1$/.test(href.replace(/^#/, '')) && !a.classList.contains('wlNavLink');
+    }
+
+    function makeNavLink(fav) {
+        // Side menus wrap the link in its own <li>: clone that wrapper too
+        var host = fav.parentElement && fav.parentElement.tagName === 'LI' && fav.parentElement.children.length === 1 ? fav.parentElement : fav;
+        var clone = host.cloneNode(true);
+        var link = clone.tagName === 'A' ? clone : clone.querySelector('a');
+        link.classList.add('wlNavLink');
+        link.setAttribute('href', (fav.getAttribute('href') || '#/home?tab=1').replace(/tab=1$/, 'tab=2'));
+        link.removeAttribute('aria-current');
+        link.removeAttribute('id');
+
+        // Icon: MUI svg or Jellyfin material-icons span
+        var svgPath = link.querySelector('svg path');
+        if (svgPath) {
+            svgPath.setAttribute('d', BOOKMARK_PATH);
+            svgPath.closest('svg').querySelectorAll('path').forEach(function (p, i) { if (i > 0) p.remove(); });
+        }
+        var icon = link.querySelector('.material-icons');
+        if (icon) {
+            icon.classList.remove('favorite');
+            icon.classList.add('wlBookmarkIcon');
+            icon.textContent = '';
+        }
+
+        // Label: first visible text node gets our name
+        var walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT);
+        var done = false;
+        var node;
+        while ((node = walker.nextNode())) {
+            if (!node.nodeValue.trim() || node.parentElement.closest('svg, .material-icons')) continue;
+            node.nodeValue = done ? '' : t('tab');
+            done = true;
+        }
+        link.title = t('tab');
+
+        link.addEventListener('click', function (e) {
+            // Already on the home page: switch directly (the router ignores a link to the same page)
+            if (homeActive() && homeTabParam() === '2') {
+                e.preventDefault();
+                activateTab();
+            }
+            // MUI side menu: close it like a normal navigation would
+            var backdrop = document.querySelector('.MuiDrawer-root .MuiBackdrop-root');
+            if (backdrop) setTimeout(function () { backdrop.click(); }, 0);
+        });
+        return clone;
+    }
+
+    function ensureNavLinks() {
+        document.querySelectorAll('a[href*="tab=1"]').forEach(function (fav) {
+            if (!isFavoritesLink(fav) || fav.closest('.wlPage, .wlOverlay')) return;
+            var host = fav.parentElement && fav.parentElement.tagName === 'LI' && fav.parentElement.children.length === 1 ? fav.parentElement : fav;
+            var next = host.nextElementSibling;
+            if (next && (next.classList.contains('wlNavLink') || next.querySelector(':scope > .wlNavLink'))) return;
+            // React may have moved our link: drop stale copies in this container
+            host.parentElement.querySelectorAll(':scope > .wlNavLink, :scope > li > .wlNavLink').forEach(function (old) {
+                (old.parentElement.tagName === 'LI' && old.parentElement !== host.parentElement ? old.parentElement : old).remove();
+            });
+            host.insertAdjacentElement('afterend', makeNavLink(fav));
+        });
+
+        // Highlight our link while the watchlist is shown
+        var active = !!tabVisible();
+        document.querySelectorAll('.wlNavLink').forEach(function (link) {
+            setClass(link, 'wlNavLink-active', active);
+            var path = link.querySelector('svg path');
+            var d = active ? BOOKMARK_FILLED_PATH : BOOKMARK_PATH;
+            if (path && path.getAttribute('d') !== d) path.setAttribute('d', d);
+        });
+    }
+
+    // Open the tab when the URL says #/home?tab=2 (once per visit, so native tabs can still be chosen)
+    function openFromUrl() {
+        if (!homeActive()) {
+            state.urlOpened = null;
+            return;
+        }
+        if (homeTabParam() !== '2') {
+            // Without a tab bar nothing else hides our content when the URL switches to another tab
+            if (state.urlOpened && !document.querySelector('.wlTabButton')) {
+                var own = document.querySelector('.wlTabContent.is-active');
+                if (own) own.classList.remove('is-active');
+            }
+            state.urlOpened = null;
+            return;
+        }
+        if (state.urlOpened === location.hash) return;
+        if (!document.querySelector('.wlTabContent')) return;
+        state.urlOpened = location.hash;
+        activateTab();
     }
 
     function tabVisible() {
@@ -803,6 +917,8 @@
             scanButtons();
             refreshButtons();
             ensureTab();
+            openFromUrl();
+            ensureNavLinks();
         }, 120);
     }
 

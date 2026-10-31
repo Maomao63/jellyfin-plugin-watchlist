@@ -4,7 +4,7 @@
 
 A personal **watchlist with categories** for Jellyfin.
 
-- Adds a **Watchlist** tab next to *Home* and *Favorites* on the home screen
+- Adds a **Watchlist** link right after *Favorites* – in the top bar of the default *Modern* layout, in the side menu, and as a tab next to *Home* / *Favorites* in the legacy layouts
 - Adds a **bookmark button** right next to every favorite heart – on details pages, in season/episode lists and on cards
 - Clicking the bookmark opens a small dialog: tick one or more categories or create a new one on the spot
 - Works for movies, series, seasons and episodes
@@ -16,7 +16,7 @@ A personal **watchlist with categories** for Jellyfin.
 
 ## Compatibility
 
-- **Layouts:** the default *Modern* layout of Jellyfin 12 and the *Legacy* layouts (desktop/mobile)
+- **Layouts:** the default *Modern* layout of Jellyfin 12 (link in the top bar) and the *Legacy* layouts (desktop/mobile, extra home tab). Direct link: `#/home?tab=2`
 - **Built-in themes:** Dark, Light, Apple TV, Blue Radiance, Purple Haze, WMC – colors are taken from the theme palette
 - **CSS themes:** tested with [ElegantFin](https://github.com/lscambo13/ElegantFin) (the tab gets a matching icon);
   other CSS themes should work as long as they keep Jellyfin's standard tab and button classes
@@ -40,7 +40,7 @@ A personal **watchlist with categories** for Jellyfin.
 
 2. Open the catalog and install **File Transformation** and **Watchlist**.
 3. Restart Jellyfin.
-4. Reload the web UI (Ctrl+F5). The **Watchlist** tab appears on the home screen.
+4. Reload the web UI (Ctrl+F5). **Watchlist** appears right after *Favorites*.
 
 No configuration is needed.
 

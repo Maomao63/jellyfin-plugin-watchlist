@@ -593,3 +593,8 @@
     opacity: 1;
     transform: translate(-50%, 0);
 }
+
+/* ---- "Watchlist" link next to "Favorites" (Modern layout) ---- */
+.wlNavLink.wlNavLink-active {
+    color: var(--jf-palette-primary-main, #00a4dc) !important;
+}

@@ -6,5 +6,5 @@
   "targetAbi": "12.4.0.0",
   "overview": "Your personal watchlist with categories, right on the home screen",
   "description": "Adds a Watchlist tab next to Home and Favorites on the home screen and a bookmark button next to every favorite heart (movies, series, seasons, episodes). Organize what you still want to watch in your own categories. Every user has their own list. Requires the File Transformation plugin.",
-  "changelog": "Fixed the Watchlist tab not loading (error 't is not a function'). Colors now follow the Jellyfin theme (Light, Apple TV and all other built-in themes). Fixed the watchlist staying visible next to Home in the legacy layout. Last German text in the category manager translated."
+  "changelog": "Modern layout (default in Jellyfin 12): Watchlist link right after Favorites in the top bar and in the side menu. The watchlist can also be opened directly via #/home?tab=2."
 }
