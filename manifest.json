@@ -2,6 +2,14 @@
   {
     "versions": [
       {
+        "version": "1.4.0.0",
+        "changelog": "New built-in default category 'Watch later' (always there, cannot be renamed or deleted, name follows the UI language). Inside it, items are split into collapsible Movies / Series groups based on the item type (series, seasons and episodes count as Series). Existing 'Watch later' / 'Später ansehen' categories become the default automatically.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/Maomao63/jellyfin-plugin-watchlist/releases/download/v1.4.0.0/watchlist_1.4.0.0.zip",
+        "checksum": "51e92b9ff61a876c09fd7d69bada99b7",
+        "timestamp": "2026-10-31T15:30:32Z"
+      },
+      {
         "version": "1.3.0.0",
         "changelog": "Modern layout (default in Jellyfin 12): Watchlist link right after Favorites in the top bar and in the side menu. The watchlist can also be opened directly via #/home?tab=2.",
         "targetAbi": "12.4.0.0",
