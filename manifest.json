@@ -2,6 +2,14 @@
   {
     "versions": [
       {
+        "version": "1.3.0.0",
+        "changelog": "Modern layout (default in Jellyfin 12): Watchlist link right after Favorites in the top bar and in the side menu. The watchlist can also be opened directly via #/home?tab=2.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/Maomao63/jellyfin-plugin-watchlist/releases/download/v1.3.0.0/watchlist_1.3.0.0.zip",
+        "checksum": "3676e1ecb92cef7ae023e4fef41799a2",
+        "timestamp": "2026-10-31T14:35:15Z"
+      },
+      {
         "version": "1.2.0.0",
         "changelog": "Fixed the Watchlist tab not loading (error 't is not a function'). Colors now follow the Jellyfin theme (Light, Apple TV and all other built-in themes). Fixed the watchlist staying visible next to Home in the legacy layout. Last German text in the category manager translated.",
         "targetAbi": "12.4.0.0",
