@@ -2,6 +2,14 @@
   {
     "versions": [
       {
+        "version": "1.4.1.0",
+        "changelog": "Overview ('All') now shows only the 8 most recently added items per category (per Movies/Series group in Watch later) in a single scrollable row, like the Favorites rows. 'Show all' opens the full category.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/Maomao63/jellyfin-plugin-watchlist/releases/download/v1.4.1.0/watchlist_1.4.1.0.zip",
+        "checksum": "81f7b305eed068afabe85a44d163efaf",
+        "timestamp": "2026-10-31T16:01:38Z"
+      },
+      {
         "version": "1.4.0.0",
         "changelog": "New built-in default category 'Watch later' (always there, cannot be renamed or deleted, name follows the UI language). Inside it, items are split into collapsible Movies / Series groups based on the item type (series, seasons and episodes count as Series). Existing 'Watch later' / 'Später ansehen' categories become the default automatically.",
         "targetAbi": "12.4.0.0",
