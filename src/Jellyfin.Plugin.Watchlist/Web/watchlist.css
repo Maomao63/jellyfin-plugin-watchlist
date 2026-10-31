@@ -598,3 +598,69 @@
 .wlNavLink.wlNavLink-active {
     color: var(--jf-palette-primary-main, #00a4dc) !important;
 }
+
+/* ---- Collapsible groups (Movies / Series) in the default category ---- */
+.wlGroup {
+    margin: 0 0 1em;
+}
+
+.wlGroupTitle {
+    display: inline-flex;
+    align-items: center;
+    gap: .35em;
+    cursor: pointer;
+    list-style: none;
+    font-size: 1.05em;
+    font-weight: 600;
+    padding: .3em .7em .3em .3em;
+    margin-bottom: .6em;
+    border-radius: var(--wlRadiusSmall);
+    color: var(--wlText);
+    user-select: none;
+}
+
+.wlGroupTitle::-webkit-details-marker {
+    display: none;
+}
+
+.wlGroupTitle:hover,
+.wlGroupTitle:focus-visible {
+    background: var(--wlSurface);
+    outline: none;
+}
+
+.wlGroupCount {
+    font-size: .8em;
+    font-weight: 400;
+    color: var(--wlTextMuted);
+}
+
+.material-icons.wlChevron::before {
+    content: "\e5cc"; /* chevron_right */
+}
+
+.material-icons.wlChevron {
+    font-size: 1.3em;
+    transition: transform .15s ease;
+}
+
+.wlGroup[open] > .wlGroupTitle .wlChevron {
+    transform: rotate(90deg);
+}
+
+.wlGroup:not([open]) > .wlGroupTitle {
+    margin-bottom: 0;
+}
+
+/* ---- Default category in the manage panel ---- */
+.wlManageRow-default input[type=text]:disabled {
+    opacity: .75;
+    cursor: not-allowed;
+}
+
+.wlManage .wlLocked,
+.wlManage .wlLocked:hover {
+    background: transparent !important;
+    color: var(--wlTextMuted);
+    cursor: default;
+}

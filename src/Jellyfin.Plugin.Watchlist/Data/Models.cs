@@ -25,6 +25,13 @@ public class Category
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this is the built-in "Watch later" category.
+    /// It always exists and cannot be renamed or deleted.
+    /// </summary>
+    [JsonPropertyName("isDefault")]
+    public bool IsDefault { get; set; }
+
     [JsonPropertyName("createdAt")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

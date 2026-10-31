@@ -8,7 +8,9 @@ A personal **watchlist with categories** for Jellyfin.
 - Adds a **bookmark button** right next to every favorite heart – on details pages, in season/episode lists and on cards
 - Clicking the bookmark opens a small dialog: tick one or more categories or create a new one on the spot
 - Works for movies, series, seasons and episodes
-- Create, rename, reorder and delete categories
+- Built-in **Watch later** category for everything: always there, and split into collapsible **Movies** and **Series** groups
+  (series, seasons and episodes are recognized automatically from Jellyfin's item type)
+- Create, rename, reorder and delete your own categories
 - Filter by category, hide watched items, sort by date added or title
 - Every user has their own list
 - English UI, German when Jellyfin is set to German

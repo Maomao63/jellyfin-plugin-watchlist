@@ -12,6 +12,14 @@ public class WatchlistStore
 {
     public const int MaxNameLength = 60;
 
+    /// <summary>
+    /// Stored name of the default category. The web UI shows a translated name instead.
+    /// </summary>
+    public const string DefaultCategoryName = "Watch later";
+
+    // Names the default category had in older versions (1.0 created "Später ansehen").
+    private static readonly string[] s_legacyDefaultNames = { "Watch later", "Später ansehen" };
+
     private static readonly JsonSerializerOptions s_jsonOptions = new() { WriteIndented = true };
 
     private readonly string _folder;
@@ -26,7 +34,7 @@ public class WatchlistStore
     }
 
     /// <summary>
-    /// Reads the list. New users get a default category.
+    /// Reads the list. Every list has a default category (Watch later).
     /// </summary>
     public async Task<UserWatchlist> GetAsync(Guid userId)
     {
@@ -34,7 +42,14 @@ public class WatchlistStore
         await gate.WaitAsync().ConfigureAwait(false);
         try
         {
-            return await LoadAsync(userId).ConfigureAwait(false);
+            var list = await LoadAsync(userId).ConfigureAwait(false);
+            if (EnsureDefaultCategory(list))
+            {
+                // Persist right away so the default category keeps its id.
+                await SaveAsync(userId, list).ConfigureAwait(false);
+            }
+
+            return list;
         }
         finally
         {
@@ -52,6 +67,7 @@ public class WatchlistStore
         try
         {
             var list = await LoadAsync(userId).ConfigureAwait(false);
+            EnsureDefaultCategory(list);
             var result = change(list);
             await SaveAsync(userId, list).ConfigureAwait(false);
             return result;
@@ -81,6 +97,41 @@ public class WatchlistStore
         }
     }
 
+    /// <summary>
+    /// Makes sure exactly one default category exists. Returns true if the list was changed.
+    /// </summary>
+    private static bool EnsureDefaultCategory(UserWatchlist list)
+    {
+        var defaults = list.Categories.Where(c => c.IsDefault).ToList();
+        if (defaults.Count == 1)
+        {
+            return false;
+        }
+
+        if (defaults.Count > 1)
+        {
+            foreach (var extra in defaults.Skip(1))
+            {
+                extra.IsDefault = false;
+            }
+
+            return true;
+        }
+
+        // Older lists: adopt the category that was created as default, otherwise add a new one on top.
+        var legacy = list.Categories.FirstOrDefault(c => s_legacyDefaultNames.Contains(c.Name, StringComparer.OrdinalIgnoreCase));
+        if (legacy is not null)
+        {
+            legacy.IsDefault = true;
+        }
+        else
+        {
+            list.Categories.Insert(0, new Category { Name = DefaultCategoryName, IsDefault = true });
+        }
+
+        return true;
+    }
+
     private SemaphoreSlim GetLock(Guid userId) => _locks.GetOrAdd(userId, _ => new SemaphoreSlim(1, 1));
 
     private string GetPath(Guid userId) => Path.Combine(_folder, userId.ToString("N") + ".json");
@@ -90,10 +141,7 @@ public class WatchlistStore
         var path = GetPath(userId);
         if (!File.Exists(path))
         {
-            var fresh = new UserWatchlist();
-            var name = Plugin.Instance?.Configuration.DefaultCategoryName;
-            fresh.Categories.Add(new Category { Name = string.IsNullOrWhiteSpace(name) ? "Watch later" : name.Trim() });
-            return fresh;
+            return new UserWatchlist();
         }
 
         try

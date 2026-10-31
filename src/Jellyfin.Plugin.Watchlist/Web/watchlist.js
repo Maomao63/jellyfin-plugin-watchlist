@@ -46,7 +46,12 @@
             removed: 'Removed',
             deleted: 'Category deleted',
             created: 'Category created',
-            renamed: 'Renamed'
+            renamed: 'Renamed',
+            defaultCategory: 'Watch later',
+            movies: 'Movies',
+            shows: 'Series',
+            other: 'Other',
+            defaultLocked: 'The default category cannot be renamed or deleted.'
         },
         de: {
             tab: 'Merkliste',
@@ -84,7 +89,12 @@
             removed: 'Entfernt',
             deleted: 'Kategorie gelöscht',
             created: 'Kategorie angelegt',
-            renamed: 'Umbenannt'
+            renamed: 'Umbenannt',
+            defaultCategory: 'Später ansehen',
+            movies: 'Filme',
+            shows: 'Serien',
+            other: 'Sonstiges',
+            defaultLocked: 'Die Standardkategorie kann nicht umbenannt oder gelöscht werden.'
         }
     };
 
@@ -131,9 +141,9 @@
 
     function loadPrefs() {
         try {
-            return Object.assign({ hidePlayed: false, sort: 'added-desc' }, JSON.parse(localStorage.getItem(PREFS_KEY) || '{}'));
+            return Object.assign({ hidePlayed: false, sort: 'added-desc', collapsed: {} }, JSON.parse(localStorage.getItem(PREFS_KEY) || '{}'));
         } catch (e) {
-            return { hidePlayed: false, sort: 'added-desc' };
+            return { hidePlayed: false, sort: 'added-desc', collapsed: {} };
         }
     }
 
@@ -381,7 +391,7 @@
                     var on = selected.indexOf(cat.id) !== -1;
                     return '<label class="wlCatRow' + (on ? ' wlCatRow-on' : '') + '">' +
                         '<input type="checkbox" data-cat="' + esc(cat.id) + '"' + (on ? ' checked' : '') + '>' +
-                        '<span class="wlCatName">' + esc(cat.name) + '</span>' +
+                        '<span class="wlCatName">' + esc(catName(cat)) + '</span>' +
                         '<span class="wlCatCount">' + cat.items.length + '</span>' +
                         '</label>';
                 }).join('');
@@ -725,7 +735,7 @@
             badge +
             '<div class="wlCardActions">' +
             '<button type="button" class="wlIconBtn" data-wl-edit="' + esc(normId(item.Id)) + '" title="' + esc(t('changeCategories')) + '"><span class="material-icons wlBookmarkIcon wlFilled" aria-hidden="true"></span></button>' +
-            '<button type="button" class="wlIconBtn" data-wl-remove="' + esc(normId(item.Id)) + '" data-wl-cat="' + esc(cat.id) + '" title="' + esc(t('removeFrom', cat.name)) + '"><span class="material-icons close" aria-hidden="true"></span></button>' +
+            '<button type="button" class="wlIconBtn" data-wl-remove="' + esc(normId(item.Id)) + '" data-wl-cat="' + esc(cat.id) + '" title="' + esc(t('removeFrom', catName(cat))) + '"><span class="material-icons close" aria-hidden="true"></span></button>' +
             '</div></div>' +
             '<div class="wlCardTitle" title="' + esc(title[0]) + '">' + esc(title[0]) + '</div>' +
             '<div class="wlCardSub" title="' + esc(title[1]) + '">' + esc(title[1] || ' ') + '</div>' +
@@ -738,6 +748,7 @@
             content.addEventListener('click', onTabClick);
             content.addEventListener('change', onTabChange);
             content.addEventListener('submit', onTabSubmit);
+            content.addEventListener('toggle', onGroupToggle, true);
         }
         if (!content.querySelector('.wlPage')) {
             content.innerHTML = '<div class="wlPage"><div class="wlLoading">' + esc(t('loading')) + '</div></div>';
@@ -755,6 +766,50 @@
         });
     }
 
+    function catName(cat) {
+        return cat.isDefault ? t('defaultCategory') : cat.name;
+    }
+
+    // Groups inside the default category, decided by the Jellyfin item type
+    var GROUPS = [
+        { key: 'movies', label: 'movies', types: ['Movie'] },
+        { key: 'shows', label: 'shows', types: ['Series', 'Season', 'Episode'] },
+        { key: 'other', label: 'other', types: null }
+    ];
+
+    function groupOf(item) {
+        for (var i = 0; i < GROUPS.length; i++) {
+            if (!GROUPS[i].types || GROUPS[i].types.indexOf(item.Type) !== -1) return GROUPS[i].key;
+        }
+        return 'other';
+    }
+
+    function gridHtml(cat, entries, items) {
+        return '<div class="wlGrid">' + entries.map(function (e) { return cardHtml(items.get(normId(e.itemId)), cat); }).join('') + '</div>';
+    }
+
+    function entriesHtml(cat, entries, items) {
+        if (!cat.isDefault) return gridHtml(cat, entries, items);
+        var collapsed = prefs.collapsed || {};
+        return GROUPS.map(function (g) {
+            var list = entries.filter(function (e) { return groupOf(items.get(normId(e.itemId))) === g.key; });
+            if (!list.length) return '';
+            return '<details class="wlGroup" data-wl-group="' + g.key + '"' + (collapsed[g.key] ? '' : ' open') + '>' +
+                '<summary class="wlGroupTitle"><span class="material-icons wlChevron" aria-hidden="true"></span>' +
+                esc(t(g.label)) + ' <span class="wlGroupCount">' + list.length + '</span></summary>' +
+                gridHtml(cat, list, items) +
+                '</details>';
+        }).join('');
+    }
+
+    function onGroupToggle(e) {
+        var group = e.target.getAttribute && e.target.getAttribute('data-wl-group');
+        if (!group) return;
+        prefs.collapsed = prefs.collapsed || {};
+        prefs.collapsed[group] = !e.target.open;
+        savePrefs();
+    }
+
     function drawTab(content, items) {
         var cats = state.list.categories;
         if (state.filter !== 'all' && !cats.some(function (c) { return c.id === state.filter; })) state.filter = 'all';
@@ -763,7 +818,7 @@
         var chips = '<button type="button" class="wlChip' + (state.filter === 'all' ? ' wlChip-on' : '') + '" data-wl-filter="all">' + esc(t('all')) + ' <span>' + total + '</span></button>' +
             cats.map(function (c) {
                 var n = c.items.filter(function (e) { return items.has(normId(e.itemId)); }).length;
-                return '<button type="button" class="wlChip' + (state.filter === c.id ? ' wlChip-on' : '') + '" data-wl-filter="' + esc(c.id) + '">' + esc(c.name) + ' <span>' + n + '</span></button>';
+                return '<button type="button" class="wlChip' + (state.filter === c.id ? ' wlChip-on' : '') + '" data-wl-filter="' + esc(c.id) + '">' + esc(catName(c)) + ' <span>' + n + '</span></button>';
             }).join('');
 
         var toolbar =
@@ -788,9 +843,9 @@
             body = cats.map(function (cat) {
                 var entries = visibleEntries(cat, items);
                 return '<section class="wlSection">' +
-                    '<h2 class="wlSectionTitle"><button type="button" data-wl-filter="' + esc(cat.id) + '">' + esc(cat.name) + '</button> <span>' + entries.length + '</span></h2>' +
+                    '<h2 class="wlSectionTitle"><button type="button" data-wl-filter="' + esc(cat.id) + '">' + esc(catName(cat)) + '</button> <span>' + entries.length + '</span></h2>' +
                     (entries.length
-                        ? '<div class="wlGrid">' + entries.map(function (e) { return cardHtml(items.get(normId(e.itemId)), cat); }).join('') + '</div>'
+                        ? entriesHtml(cat, entries, items)
                         : '<div class="wlEmptySmall">' + esc(t('emptySection')) + '</div>') +
                     '</section>';
             }).join('');
@@ -798,8 +853,8 @@
             var cat = cats.filter(function (c) { return c.id === state.filter; })[0];
             var entries = visibleEntries(cat, items);
             body = entries.length
-                ? '<div class="wlGrid">' + entries.map(function (e) { return cardHtml(items.get(normId(e.itemId)), cat); }).join('') + '</div>'
-                : '<div class="wlEmpty">' + esc(t('emptyCategory', cat.name)) + '</div>';
+                ? entriesHtml(cat, entries, items)
+                : '<div class="wlEmpty">' + esc(t('emptyCategory', catName(cat))) + '</div>';
         }
 
         content.innerHTML = '<div class="wlPage">' + toolbar + manage + body + '</div>';
@@ -813,15 +868,18 @@
             '<button type="submit" class="wlBtn wlBtnPrimary">' + esc(t('create')) + '</button>' +
             '</form>' +
             cats.map(function (c, i) {
-                return '<div class="wlManageRow">' +
-                    '<form data-wl-form="rename" data-wl-cat="' + esc(c.id) + '"><input type="text" maxlength="60" value="' + esc(c.name) + '" aria-label="' + esc(t('name')) + '"></form>' +
+                var locked = !!c.isDefault;
+                return '<div class="wlManageRow' + (locked ? ' wlManageRow-default' : '') + '">' +
+                    '<form data-wl-form="rename" data-wl-cat="' + esc(c.id) + '"><input type="text" maxlength="60" value="' + esc(catName(c)) + '" aria-label="' + esc(t('name')) + '"' + (locked ? ' disabled title="' + esc(t('defaultLocked')) + '"' : '') + '></form>' +
                     '<span class="wlManageCount">' + c.items.length + '</span>' +
                     '<button type="button" class="wlIconBtn" data-wl-move="-1" data-wl-cat="' + esc(c.id) + '"' + (i === 0 ? ' disabled' : '') + ' title="' + esc(t('moveUp')) + '"><span class="material-icons keyboard_arrow_up" aria-hidden="true"></span></button>' +
                     '<button type="button" class="wlIconBtn" data-wl-move="1" data-wl-cat="' + esc(c.id) + '"' + (i === cats.length - 1 ? ' disabled' : '') + ' title="' + esc(t('moveDown')) + '"><span class="material-icons keyboard_arrow_down" aria-hidden="true"></span></button>' +
-                    '<button type="button" class="wlIconBtn wlDanger" data-wl-delete="' + esc(c.id) + '" title="' + esc(t('deleteCategory')) + '"><span class="material-icons delete" aria-hidden="true"></span></button>' +
+                    (locked
+                        ? '<span class="wlIconBtn wlLocked" title="' + esc(t('defaultLocked')) + '"><span class="material-icons lock" aria-hidden="true"></span></span>'
+                        : '<button type="button" class="wlIconBtn wlDanger" data-wl-delete="' + esc(c.id) + '" title="' + esc(t('deleteCategory')) + '"><span class="material-icons delete" aria-hidden="true"></span></button>') +
                     '</div>';
             }).join('') +
-            '<div class="wlHint">' + esc(t('renameHint')) + '</div>' +
+            '<div class="wlHint">' + esc(t('renameHint')) + ' ' + esc(t('defaultLocked')) + '</div>' +
             '</div>';
     }
 

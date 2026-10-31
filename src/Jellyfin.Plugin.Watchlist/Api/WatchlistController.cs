@@ -96,6 +96,11 @@ public class WatchlistController : ControllerBase
                 return StatusCodes.Status404NotFound;
             }
 
+            if (category.IsDefault)
+            {
+                return StatusCodes.Status400BadRequest;
+            }
+
             if (list.Categories.Any(c => c.Id != categoryId && string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase)))
             {
                 return StatusCodes.Status409Conflict;
@@ -116,8 +121,24 @@ public class WatchlistController : ControllerBase
             return Unauthorized();
         }
 
-        var removed = await _store.UpdateAsync(userId, list => list.Categories.RemoveAll(c => c.Id == categoryId)).ConfigureAwait(false);
-        return removed > 0 ? NoContent() : NotFound();
+        var result = await _store.UpdateAsync(userId, list =>
+        {
+            var category = list.Categories.FirstOrDefault(c => c.Id == categoryId);
+            if (category is null)
+            {
+                return StatusCodes.Status404NotFound;
+            }
+
+            if (category.IsDefault)
+            {
+                return StatusCodes.Status400BadRequest;
+            }
+
+            list.Categories.Remove(category);
+            return StatusCodes.Status204NoContent;
+        }).ConfigureAwait(false);
+
+        return StatusCode(result);
     }
 
     [HttpPost("Categories/Order")]
