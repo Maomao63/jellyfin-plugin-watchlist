@@ -12,7 +12,15 @@ A personal **watchlist with categories** for Jellyfin.
 - Filter by category, hide watched items, sort by date added or title
 - Every user has their own list
 - English UI, German when Jellyfin is set to German
-- Matches the [ElegantFin](https://github.com/lscambo13/ElegantFin) theme (tab icon), but works without it too
+- Follows the colors of your Jellyfin theme
+
+## Compatibility
+
+- **Layouts:** the default *Modern* layout of Jellyfin 12 and the *Legacy* layouts (desktop/mobile)
+- **Built-in themes:** Dark, Light, Apple TV, Blue Radiance, Purple Haze, WMC – colors are taken from the theme palette
+- **CSS themes:** tested with [ElegantFin](https://github.com/lscambo13/ElegantFin) (the tab gets a matching icon);
+  other CSS themes should work as long as they keep Jellyfin's standard tab and button classes
+- **TV layout:** works, but remote-control navigation inside the dialog has not been tested much yet
 
 ## Requirements
 

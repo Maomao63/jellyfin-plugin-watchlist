@@ -1,4 +1,44 @@
-/* Watchlist for Jellyfin. Uses ElegantFin variables when available. */
+/* Watchlist for Jellyfin.
+   Colors come from the Jellyfin theme palette (--jf-palette-*, all built-in themes incl. Light/Apple TV),
+   ElegantFin variables are used for borders/radii when present. */
+
+/* Declared on our own elements (not :root) so the theme variables resolve wherever Jellyfin sets them. */
+.wlPage,
+.wlOverlay,
+.wlToast,
+.wlBookmarkBtn,
+.wlTabButton {
+    --wlText: var(--jf-palette-text-primary, #fff);
+    --wlTextMuted: var(--jf-palette-text-secondary, rgba(255, 255, 255, .7));
+    --wlSurface: var(--jf-palette-action-hover, rgba(255, 255, 255, .08));
+    --wlSurfaceHover: var(--jf-palette-action-focus, rgba(255, 255, 255, .16));
+    --wlBorder: var(--borderColor, var(--jf-palette-divider, rgba(255, 255, 255, .12)));
+    --wlBorderWidth: var(--borderWidth, 1px);
+    --wlPaper: var(--jf-palette-background-paper, #1c1c1e);
+    --wlInput: var(--jf-palette-FilledInput-bg, rgba(0, 0, 0, .3));
+    --wlAccent: var(--jf-palette-primary-main, #00a4dc);
+    --wlAccentText: var(--jf-palette-primary-contrastText, #fff);
+    --wlDanger: var(--jf-palette-error-main, #dc3c3c);
+    --wlToastBg: var(--jf-palette-SnackbarContent-bg, #323232);
+    --wlToastText: var(--jf-palette-SnackbarContent-color, #fff);
+    --wlRadiusSmall: var(--smallRadius, .5em);
+    --wlRadius: var(--largeRadius, .8em);
+}
+
+/* Light themes without palette variables (detected in JS by the text color): light fallbacks */
+.wl-light .wlPage,
+.wl-light .wlOverlay,
+.wl-light .wlToast,
+.wl-light .wlBookmarkBtn,
+.wl-light .wlTabButton {
+    --wlText: var(--jf-palette-text-primary, #000);
+    --wlTextMuted: var(--jf-palette-text-secondary, rgba(0, 0, 0, .6));
+    --wlSurface: var(--jf-palette-action-hover, rgba(0, 0, 0, .05));
+    --wlSurfaceHover: var(--jf-palette-action-focus, rgba(0, 0, 0, .12));
+    --wlBorder: var(--jf-palette-divider, rgba(0, 0, 0, .12));
+    --wlPaper: var(--jf-palette-background-paper, #fff);
+    --wlInput: var(--jf-palette-FilledInput-bg, rgba(0, 0, 0, .06));
+}
 
 /* ---- Bookmark icon ---- */
 .material-icons.wlBookmarkIcon::before {
@@ -13,7 +53,7 @@
 }
 
 .wlBookmarkBtn.wlActive .material-icons.wlBookmarkIcon {
-    color: var(--wlAccent, #00a4dc);
+    color: var(--wlAccent);
 }
 
 /* ---- Tab icon (only when the theme shows tab icons) ---- */
@@ -24,20 +64,20 @@
 /* ---- Tab content ---- */
 .wlPage {
     padding: 1em 3.3% 3em;
-    color: rgba(255, 255, 255, .87);
+    color: var(--wlText);
 }
 
 .wlLoading,
 .wlEmpty {
     padding: 3em 1em;
     text-align: center;
-    opacity: .7;
+    color: var(--wlTextMuted);
     font-size: 1.1em;
 }
 
 .wlEmptySmall {
     padding: .5em 0 1em;
-    opacity: .6;
+    color: var(--wlTextMuted);
 }
 
 .wlToolbar {
@@ -62,9 +102,9 @@
 .wlSelect {
     font: inherit;
     font-size: .95em;
-    color: inherit;
-    background: rgba(255, 255, 255, .08);
-    border: var(--borderWidth, 1px) solid var(--borderColor, rgba(255, 255, 255, .12));
+    color: var(--wlText);
+    background: var(--wlSurface);
+    border: var(--wlBorderWidth) solid var(--wlBorder);
     border-radius: 2em;
     padding: .45em 1em;
     cursor: pointer;
@@ -75,45 +115,55 @@
 }
 
 .wlSelect {
-    border-radius: var(--smallRadius, .5em);
+    border-radius: var(--wlRadiusSmall);
     padding-right: .6em;
 }
 
 .wlSelect option {
-    background: #1c1c1e;
-    color: #fff;
+    background: var(--wlPaper);
+    color: var(--wlText);
 }
 
 .wlChip span {
-    opacity: .6;
+    color: var(--wlTextMuted);
     font-size: .9em;
 }
 
 .wlChip:hover,
 .wlBtn:hover,
-.wlSelect:hover {
-    background: rgba(255, 255, 255, .16);
+.wlSelect:hover,
+.wlChip:focus-visible,
+.wlBtn:focus-visible {
+    background: var(--wlSurfaceHover);
 }
 
 .wlChip-on,
 .wlChip-on:hover,
-.wlBtnPrimary {
-    background: rgba(245, 245, 245, .9);
-    color: #111;
+.wlBtnPrimary,
+.wlBtnPrimary:hover {
+    background: var(--wlAccent);
+    color: var(--wlAccentText);
     border-color: transparent;
 }
 
-.wlBtnPrimary:hover {
-    background: #fff;
+.wlChip-on span {
+    color: inherit;
+    opacity: .8;
 }
 
-.wlBtnDanger {
-    background: rgba(220, 60, 60, .18);
-    border-color: rgba(220, 60, 60, .4);
+.wlBtnPrimary:hover {
+    filter: brightness(1.1);
+}
+
+.wlBtnDanger,
+.wlBtnDanger:hover {
+    color: var(--wlDanger);
+    border-color: var(--wlDanger);
+    background: transparent;
 }
 
 .wlBtnDanger:hover {
-    background: rgba(220, 60, 60, .3);
+    background: var(--wlSurface);
 }
 
 .wlBtn .material-icons {
@@ -133,7 +183,7 @@
 .wlCatRow input {
     width: 1.1em;
     height: 1.1em;
-    accent-color: var(--wlAccent, #00a4dc);
+    accent-color: var(--wlAccent);
 }
 
 .wlSection {
@@ -158,13 +208,14 @@
     cursor: pointer;
 }
 
-.wlSectionTitle button:hover {
+.wlSectionTitle button:hover,
+.wlSectionTitle button:focus-visible {
     text-decoration: underline;
 }
 
 .wlSectionTitle span {
     font-size: .7em;
-    opacity: .55;
+    color: var(--wlTextMuted);
     font-weight: 400;
 }
 
@@ -186,26 +237,40 @@
     }
 }
 
+.layout-tv .wlGrid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
 .wlCard {
     display: block;
     color: inherit;
     text-decoration: none;
     min-width: 0;
+    outline: none;
 }
 
 .wlPoster {
     position: relative;
     aspect-ratio: 2 / 3;
-    border-radius: var(--largeRadius, var(--smallRadius, .6em));
-    background: rgba(255, 255, 255, .06) center / cover no-repeat;
+    border-radius: var(--wlRadius);
+    background: var(--wlSurface) center / cover no-repeat;
     overflow: hidden;
-    border: var(--borderWidth, 1px) solid var(--borderColor, rgba(255, 255, 255, .08));
-    transition: transform .15s ease, box-shadow .15s ease;
+    border: var(--wlBorderWidth) solid var(--wlBorder);
+    transition: box-shadow .15s ease;
+}
+
+/* Fallback for browsers without aspect-ratio (older TVs) */
+@supports not (aspect-ratio: 2 / 3) {
+    .wlPoster {
+        height: 0;
+        padding-bottom: 150%;
+    }
 }
 
 .wlCard:hover .wlPoster,
+.wlCard:focus .wlPoster,
 .wlCard:focus-visible .wlPoster {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, .85);
+    box-shadow: 0 0 0 3px var(--wlAccent);
 }
 
 .wlNoImage {
@@ -215,7 +280,7 @@
     align-items: center;
     justify-content: center;
     font-size: 3em !important;
-    opacity: .3;
+    color: var(--wlTextMuted);
 }
 
 .wlNoImage::before {
@@ -230,8 +295,8 @@
     height: 1.6em;
     padding: 0 .35em;
     border-radius: 1em;
-    background: var(--wlAccent, #00a4dc);
-    color: #fff;
+    background: var(--wlAccent);
+    color: var(--wlAccentText);
     font-size: .8em;
     font-weight: 600;
     display: flex;
@@ -244,6 +309,7 @@
     font-size: 1.2em;
 }
 
+/* Buttons on top of the poster image: always light on dark, independent of the theme */
 .wlCardActions {
     position: absolute;
     left: 0;
@@ -284,7 +350,8 @@
     padding: 0;
 }
 
-.wlIconBtn:hover:not(:disabled) {
+.wlIconBtn:hover:not(:disabled),
+.wlIconBtn:focus-visible {
     background: rgba(255, 255, 255, .25);
 }
 
@@ -308,18 +375,19 @@
 .wlCardTitle {
     margin-top: .5em;
     font-weight: 500;
+    color: var(--wlText);
 }
 
 .wlCardSub {
     font-size: .85em;
-    opacity: .6;
+    color: var(--wlTextMuted);
 }
 
 /* ---- Manage categories ---- */
 .wlManage {
-    background: rgba(255, 255, 255, .05);
-    border: var(--borderWidth, 1px) solid var(--borderColor, rgba(255, 255, 255, .1));
-    border-radius: var(--largeRadius, .8em);
+    background: var(--wlSurface);
+    border: var(--wlBorderWidth) solid var(--wlBorder);
+    border-radius: var(--wlRadius);
     padding: 1em;
     margin-bottom: 1.5em;
     max-width: 40em;
@@ -337,23 +405,30 @@
 }
 
 .wlManageCount {
-    opacity: .55;
+    color: var(--wlTextMuted);
     min-width: 2em;
     text-align: right;
     margin-right: .3em;
 }
 
+/* Icon buttons in the manage panel sit on the page, so they follow the theme */
 .wlManage .wlIconBtn {
-    background: rgba(255, 255, 255, .08);
+    color: var(--wlText);
+    background: var(--wlSurface);
 }
 
-.wlManage .wlDanger:hover {
-    background: rgba(220, 60, 60, .45) !important;
+.wlManage .wlIconBtn:hover:not(:disabled),
+.wlManage .wlIconBtn:focus-visible {
+    background: var(--wlSurfaceHover);
+}
+
+.wlManage .wlDanger:hover:not(:disabled) {
+    color: var(--wlDanger);
 }
 
 .wlHint {
     font-size: .85em;
-    opacity: .5;
+    color: var(--wlTextMuted);
     margin-top: .5em;
 }
 
@@ -366,13 +441,19 @@
 .wlPage input[type=text],
 .wlDialog input[type=text] {
     font: inherit;
-    color: inherit;
+    color: var(--wlText);
     width: 100%;
     box-sizing: border-box;
-    background: rgba(0, 0, 0, .3);
-    border: var(--borderWidth, 1px) solid var(--borderColor, rgba(255, 255, 255, .15));
-    border-radius: var(--smallRadius, .5em);
+    background: var(--wlInput);
+    border: var(--wlBorderWidth) solid var(--wlBorder);
+    border-radius: var(--wlRadiusSmall);
     padding: .5em .75em;
+}
+
+.wlPage input[type=text]:focus,
+.wlDialog input[type=text]:focus {
+    outline: 2px solid var(--wlAccent);
+    outline-offset: 0;
 }
 
 .wlNewCat input[type=text] {
@@ -382,13 +463,17 @@
 /* ---- Category dialog ---- */
 .wlOverlay {
     position: fixed;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 2000;
     background: rgba(0, 0, 0, .6);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1em;
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
 }
 
@@ -398,11 +483,10 @@
     max-height: 85vh;
     display: flex;
     flex-direction: column;
-    background: var(--headerColor, #1c1c1e);
-    background-color: rgba(28, 28, 30, .97);
-    color: rgba(255, 255, 255, .9);
-    border: var(--borderWidth, 1px) solid var(--borderColor, rgba(255, 255, 255, .12));
-    border-radius: var(--largeRadius, 1em);
+    background: var(--wlPaper);
+    color: var(--wlText);
+    border: var(--wlBorderWidth) solid var(--wlBorder);
+    border-radius: var(--wlRadius);
     box-shadow: 0 1em 3em rgba(0, 0, 0, .5);
     padding: 1.25em;
     box-sizing: border-box;
@@ -431,12 +515,12 @@
 
 .wlHeadIcon {
     font-size: 2em !important;
-    color: var(--wlAccent, #00a4dc);
+    color: var(--wlAccent);
 }
 
 .wlDialogItem {
     font-size: .9em;
-    opacity: .65;
+    color: var(--wlTextMuted);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -453,12 +537,13 @@
     align-items: center;
     gap: .75em;
     padding: .65em .5em;
-    border-radius: var(--smallRadius, .5em);
+    border-radius: var(--wlRadiusSmall);
     cursor: pointer;
 }
 
-.wlCatRow:hover {
-    background: rgba(255, 255, 255, .07);
+.wlCatRow:hover,
+.wlCatRow:focus-within {
+    background: var(--wlSurface);
 }
 
 .wlCatRow-on .wlCatName {
@@ -470,13 +555,13 @@
 }
 
 .wlCatCount {
-    opacity: .5;
+    color: var(--wlTextMuted);
     font-size: .9em;
 }
 
 .wlEmptyCats {
     padding: .5em;
-    opacity: .6;
+    color: var(--wlTextMuted);
 }
 
 .wlDialogFoot {
@@ -494,8 +579,8 @@
     bottom: 2em;
     transform: translate(-50%, 1em);
     z-index: 2100;
-    background: rgba(40, 40, 42, .97);
-    color: #fff;
+    background: var(--wlToastBg);
+    color: var(--wlToastText);
     padding: .7em 1.2em;
     border-radius: 2em;
     box-shadow: 0 .5em 1.5em rgba(0, 0, 0, .4);

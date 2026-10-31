@@ -170,8 +170,8 @@
         }
         return fetch(url, opts).then(function (res) {
             if (!res.ok) {
-                return res.text().then(function (t) {
-                    var err = new Error(t || ('HTTP ' + res.status));
+                return res.text().then(function (body) {
+                    var err = new Error(body || ('HTTP ' + res.status));
                     err.status = res.status;
                     throw err;
                 });
@@ -464,7 +464,11 @@
         var content = ensureContent(page);
         if (!content) return;
 
-        if (slider.querySelector('.wlTabButton')) return;
+        var own = slider.querySelector('.wlTabButton');
+        if (content.classList.contains('is-active') && !(own && own.classList.contains('emby-tab-button-active'))) {
+            content.classList.remove('is-active');
+        }
+        if (own) return;
         var native = slider.querySelectorAll('.emby-tab-button:not(.wlTabButton)');
         if (native.length < 2) return;
 
@@ -521,8 +525,8 @@
             b.classList.remove('emby-tab-button-active');
         });
         btn.classList.add('emby-tab-button-active');
-        content.parentNode.querySelectorAll('.tabContent').forEach(function (t) {
-            t.classList.toggle('is-active', t === content);
+        content.parentNode.querySelectorAll('.tabContent').forEach(function (tab) {
+            tab.classList.toggle('is-active', tab === content);
         });
         session(SESSION_KEY, '1');
         renderTab(content);
@@ -593,7 +597,7 @@
     }
 
     function cardHtml(item, cat) {
-        var t = titleFor(item);
+        var title = titleFor(item);
         var img = imageFor(item);
         var serverId = item.ServerId || client().serverId();
         var played = item.UserData && item.UserData.Played;
@@ -609,8 +613,8 @@
             '<button type="button" class="wlIconBtn" data-wl-edit="' + esc(normId(item.Id)) + '" title="' + esc(t('changeCategories')) + '"><span class="material-icons wlBookmarkIcon wlFilled" aria-hidden="true"></span></button>' +
             '<button type="button" class="wlIconBtn" data-wl-remove="' + esc(normId(item.Id)) + '" data-wl-cat="' + esc(cat.id) + '" title="' + esc(t('removeFrom', cat.name)) + '"><span class="material-icons close" aria-hidden="true"></span></button>' +
             '</div></div>' +
-            '<div class="wlCardTitle" title="' + esc(t[0]) + '">' + esc(t[0]) + '</div>' +
-            '<div class="wlCardSub" title="' + esc(t[1]) + '">' + esc(t[1] || ' ') + '</div>' +
+            '<div class="wlCardTitle" title="' + esc(title[0]) + '">' + esc(title[0]) + '</div>' +
+            '<div class="wlCardSub" title="' + esc(title[1]) + '">' + esc(title[1] || ' ') + '</div>' +
             '</a>';
     }
 
@@ -692,7 +696,7 @@
         return '<div class="wlManage">' +
             '<form class="wlNewCat" data-wl-form="new">' +
             '<input type="text" maxlength="60" placeholder="' + esc(t('newCategory')) + '" aria-label="' + esc(t('newCategory')) + '">' +
-            '<button type="submit" class="wlBtn wlBtnPrimary">Anlegen</button>' +
+            '<button type="submit" class="wlBtn wlBtnPrimary">' + esc(t('create')) + '</button>' +
             '</form>' +
             cats.map(function (c, i) {
                 return '<div class="wlManageRow">' +
@@ -772,6 +776,14 @@
 
     // ---------- Startup ----------
 
+    // Light theme detection by text color, used as fallback when the theme has no palette variables.
+    function updateThemeClass() {
+        var m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(getComputedStyle(document.body || document.documentElement).color || '');
+        if (!m) return;
+        var luminance = (0.299 * m[1] + 0.587 * m[2] + 0.114 * m[3]) / 255;
+        setClass(document.documentElement, 'wl-light', luminance < 0.5);
+    }
+
     var timer = null;
     function schedule() {
         if (timer) return;
@@ -787,6 +799,7 @@
                 state.filter = 'all';
                 loadList(true).catch(function () { /* retried next time */ });
             }
+            updateThemeClass();
             scanButtons();
             refreshButtons();
             ensureTab();
