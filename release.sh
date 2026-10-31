@@ -2,7 +2,7 @@
 # Builds, uploads a GitHub release and adds the version to manifest.json.
 # Usage: ./release.sh   (version from the .csproj, changelog from build.json)
 # Versioning: small changes/fixes bump the third part (1.4.0.0 -> 1.4.1.0 -> 1.4.2.0),
-# new features the second (1.5.0.0), breaking changes the first. See README "Versioning".
+# new features the second (1.5.0.0), breaking changes the first.
 set -euo pipefail
 cd "$(dirname "$0")"
 REPO=Maomao63/jellyfin-plugin-watchlist

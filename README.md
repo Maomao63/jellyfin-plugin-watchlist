@@ -65,16 +65,6 @@ Requires the .NET 10 SDK.
 ./release.sh    # maintainers: GitHub release + manifest.json update
 ```
 
-## Versioning
-
-Jellyfin uses four-part versions; the last part is always `0`.
-
-| Change | Example |
-| --- | --- |
-| Bug fix or small change | `1.4.0.0` → `1.4.1.0` → `1.4.2.0` |
-| New feature | `1.4.2.0` → `1.5.0.0` |
-| Breaking change (data/API) | `1.5.0.0` → `2.0.0.0` |
-
 ## API
 
 All endpoints require a signed-in user and only touch that user's list.
