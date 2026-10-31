@@ -32,7 +32,7 @@ A personal **watchlist with categories** for Jellyfin.
 ## Where is the data stored?
 
 One JSON file per user in `<jellyfin data>/watchlist/<user id>.json` (in Docker usually `/config/data/watchlist/`).
-The data stays when the plugin is updated. Data from version 1.0 ("Merkliste") is moved there automatically.
+The data stays when the plugin is updated.
 
 ## Clients
 
