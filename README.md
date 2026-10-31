@@ -20,7 +20,7 @@ A personal **watchlist with categories** for Jellyfin.
 - **Built-in themes:** Dark, Light, Apple TV, Blue Radiance, Purple Haze, WMC – colors are taken from the theme palette
 - **CSS themes:** tested with [ElegantFin](https://github.com/lscambo13/ElegantFin) (the tab gets a matching icon);
   other CSS themes should work as long as they keep Jellyfin's standard tab and button classes
-- **TV layout:** works, but remote-control navigation inside the dialog has not been tested much yet
+- **TV layout:** should work, but has not been tested on TV devices or with a remote yet
 
 ## Requirements
 
