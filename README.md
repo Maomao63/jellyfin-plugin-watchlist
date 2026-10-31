@@ -22,12 +22,19 @@ A personal **watchlist with categories** for Jellyfin.
 
 ## Installation
 
-1. In Jellyfin open **Dashboard → Plugins → Repositories** (in older layouts: *Catalog → ⚙ Settings*) and add a repository:
-   - Name: `Watchlist`
-   - URL: `https://raw.githubusercontent.com/Maomao63/jellyfin-plugin-watchlist/main/manifest.json`
-2. Install **File Transformation** if you do not have it yet.
-3. Open the catalog, install **Watchlist** and restart Jellyfin.
-4. Reload the web UI (Ctrl+F5).
+1. In Jellyfin open **Dashboard → Plugins → Repositories** (in older layouts: *Catalog → ⚙ Settings*) and add these two repositories
+   (skip the second one if you already use File Transformation):
+
+   | Name | URL |
+   | --- | --- |
+   | Watchlist | `https://raw.githubusercontent.com/Maomao63/jellyfin-plugin-watchlist/main/manifest.json` |
+   | IAmParadox27 | `https://www.iamparadox.dev/jellyfin/plugins/manifest.json` |
+
+2. Open the catalog and install **File Transformation** and **Watchlist**.
+3. Restart Jellyfin.
+4. Reload the web UI (Ctrl+F5). The **Watchlist** tab appears on the home screen.
+
+No configuration is needed.
 
 ## Where is the data stored?
 
