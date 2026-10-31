@@ -18,6 +18,7 @@
   document.write('<link rel="stylesheet" href="themes/' + base + '/theme.css">');
   if (THEME === 'elegantfin') document.write('<link rel="stylesheet" href="elegantfin.css">');
   if (P.get('legacy')) document.documentElement.classList.add('layout-desktop');
+  if (P.get('demo')) document.write('<style>.wlCardActions{opacity:0!important}.wlGrid .wlCard:first-child .wlCardActions{opacity:1!important}#indexPage>#homeTab .sections>*:not(.demoDetail):not(.demoDetailsPage){display:none}#indexPage{padding-top:3.2em!important}</style>');
   if (P.get('notrans')) document.write('<style>*{transition:none!important}</style>');
 </script>
 <link rel="stylesheet" href="watchlist.css">
@@ -34,8 +35,8 @@
 <body class="force-scroll">
 <header id="modernBar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:20;height:48px;align-items:center;gap:.25em;padding:0 1em;background:#1a2030;color:#fff;font-family:sans-serif">
   <a class="MuiButton-root MuiButton-text MuiButton-colorInherit" href="#/home" style="color:inherit;text-decoration:none;font-weight:700;margin-right:1em">Jellyfin</a>
-  <a class="MuiButton-root MuiButton-text MuiButton-colorInherit" href="#/home?tab=1" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:6px 8px"><span class="MuiButton-startIcon"><svg class="MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"></path></svg></span>Favoriten</a>
-  <a class="MuiButton-root MuiButton-text MuiButton-colorInherit" href="#/tv?topParentId=x" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:6px 8px"><span class="MuiButton-startIcon"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2m0 14H3V5h18z"></path></svg></span>Anime</a>
+  <a class="MuiButton-root MuiButton-text MuiButton-colorInherit" href="#/home?tab=1" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:6px 8px"><span class="MuiButton-startIcon"><svg class="MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"></path></svg></span>Favorites</a>
+  <a class="MuiButton-root MuiButton-text MuiButton-colorInherit" href="#/tv?topParentId=x" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:6px 8px"><span class="MuiButton-startIcon"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2m0 14H3V5h18z"></path></svg></span>Shows</a>
 </header>
 <div id="legacyHeaderWrap"><div class="skinHeader skinHeader-withBackground noHomeButtonHeader">
   <div class="headerTabs sectionTabs">
@@ -53,9 +54,25 @@
   <div id="indexPage" class="page mainAnimatedPage homePage libraryPage allLibraryPage pageWithAbsoluteTabs withTabs">
     <div class="tabContent pageTabContent is-active" id="homeTab" data-index="0">
       <div class="sections">
+        <div class="demoDetailsPage" style="display:none">
+          <div style="display:flex;gap:2em;align-items:flex-start;padding:2em 3.3%">
+            <div id="demoPoster" style="width:180px;aspect-ratio:2/3;border-radius:.6em;background:#333 center/cover;flex:none;box-shadow:0 .5em 1.5em rgba(0,0,0,.5)"></div>
+            <div style="flex:1;min-width:0">
+              <h1 style="margin:.2em 0 .3em;font-size:2.2em">The Last Lighthouse</h1>
+              <div style="opacity:.75;margin-bottom:1.2em">2024 &nbsp;·&nbsp; 1h 52m &nbsp;·&nbsp; Drama, Mystery</div>
+              <div class="mainDetailButtons detailButtons" style="display:flex;gap:.3em;flex-wrap:wrap">
+                <button is="emby-button" type="button" class="button-flat btnPlay detailButton emby-button" title="Play"><div class="detailButton-content"><span class="material-icons detailButton-icon play_arrow" aria-hidden="true"></span></div></button>
+                <button is="emby-playstatebutton" type="button" class="button-flat btnPlaystate detailButton emby-button" title="Mark played"><div class="detailButton-content"><span class="material-icons detailButton-icon check" aria-hidden="true"></span></div></button>
+                <button is="emby-ratingbutton" type="button" class="button-flat btnUserRating detailButton emby-button" data-id="m1" title="Favorite"><div class="detailButton-content"><span class="material-icons detailButton-icon favorite" aria-hidden="true"></span></div></button>
+                <button is="emby-button" type="button" class="button-flat btnMoreCommands detailButton emby-button" title="More"><div class="detailButton-content"><span class="material-icons detailButton-icon more_vert" aria-hidden="true"></span></div></button>
+              </div>
+              <p style="opacity:.75;max-width:40em;line-height:1.5;margin-top:1.2em">A retired keeper returns to the island where his brother vanished thirty years ago. (Fictional demo title.)</p>
+            </div>
+          </div>
+        </div>
         <div class="demoDetail">
           <div class="mainDetailButtons detailButtons">
-            <button is="emby-ratingbutton" type="button" class="button-flat btnUserRating detailButton emby-button" data-id="a1" title="Favorite"><div class="detailButton-content"><span class="material-icons detailButton-icon favorite" aria-hidden="true"></span></div></button>
+            <button is="emby-ratingbutton" type="button" class="button-flat btnUserRating detailButton emby-button" data-id="a1" data-demo-id="m1" title="Favorite"><div class="detailButton-content"><span class="material-icons detailButton-icon favorite" aria-hidden="true"></span></div></button>
           </div>
         </div>
         <div class="demoCards">
@@ -89,7 +106,44 @@
     f6: { Id: 'f6', Type: 'Movie', Name: 'Oppenheimer – a very long title that should be cut off', ProductionYear: 2023, ImageTags: { Primary: 'x' }, UserData: { Played: true } },
     g7: { Id: 'g7', Type: 'Movie', Name: 'No Image Movie', ProductionYear: 2020, ImageTags: {}, UserData: { Played: false } }
   };
-  var LIST = { version: 1, categories: [
+  // ---- Demo mode (README screenshots): fictional titles, generated posters ----
+  if (P.get('demo')) {
+    var DEMO_COLORS = [['#2b1055', '#7597de'], ['#0f2027', '#2c5364'], ['#42275a', '#734b6d'], ['#16222a', '#3a6073'], ['#3a1c71', '#d76d77'], ['#1d2b64', '#f8cdda'], ['#134e5e', '#71b280'], ['#4b134f', '#c94b4b'], ['#232526', '#414345'], ['#0b486b', '#f56217']];
+    var DEMO_ICONS = { Movie: 'M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4z', Series: 'M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2m0 14H3V5h18z' };
+    poster = function (id) {
+      var item = ITEMS[id] || {};
+      var c = DEMO_COLORS[(id.charCodeAt(0) * 3 + id.charCodeAt(1)) % DEMO_COLORS.length];
+      var title = (item.SeriesName || item.Name || '').toUpperCase();
+      var words = title.split(' '), lines = [], line = '';
+      words.forEach(function (w) { if ((line + ' ' + w).trim().length > 11) { lines.push(line.trim()); line = w; } else { line += ' ' + w; } });
+      lines.push(line.trim());
+      var text = lines.slice(0, 3).map(function (l, i) { return '<text x="100" y="' + (205 + i * 26) + '" font-size="19" font-weight="700" text-anchor="middle" fill="white" font-family="Noto Sans, sans-serif" letter-spacing="0.5">' + l.replace(/&/g, '&amp;') + '</text>'; }).join('');
+      var icon = DEMO_ICONS[item.Type === 'Movie' ? 'Movie' : 'Series'];
+      return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset="1" stop-color="' + c[1] + '"/></linearGradient></defs><rect width="200" height="300" fill="url(#g)"/><circle cx="150" cy="60" r="70" fill="white" fill-opacity="0.07"/><g transform="translate(76 70) scale(2)" fill="white" fill-opacity="0.85"><path d="' + icon + '"/></g>' + text + '</svg>');
+    };
+    ITEMS = {
+      m1: { Id: 'm1', Type: 'Movie', Name: 'The Last Lighthouse', ProductionYear: 2024, ImageTags: { Primary: 'x' }, UserData: { Played: false } },
+      m2: { Id: 'm2', Type: 'Movie', Name: 'Paper Moon City', ProductionYear: 2023, ImageTags: { Primary: 'x' }, UserData: { Played: true } },
+      m3: { Id: 'm3', Type: 'Movie', Name: 'Northbound', ProductionYear: 2022, ImageTags: { Primary: 'x' }, UserData: { Played: false } },
+      m4: { Id: 'm4', Type: 'Movie', Name: 'Glass Garden', ProductionYear: 2025, ImageTags: { Primary: 'x' }, UserData: { Played: false } },
+      m5: { Id: 'm5', Type: 'Movie', Name: 'Echoes of Tomorrow', ProductionYear: 2021, ImageTags: { Primary: 'x' }, UserData: { Played: false } },
+      s1: { Id: 's1', Type: 'Series', Name: 'Starfall Academy', ProductionYear: 2023, ImageTags: { Primary: 'x' }, UserData: { Played: false, UnplayedItemCount: 12 } },
+      s2: { Id: 's2', Type: 'Season', Name: 'Season 2', SeriesName: 'Harbor Lights', SeriesId: 's2', ImageTags: { Primary: 'x' }, UserData: { Played: false, UnplayedItemCount: 8 } },
+      s3: { Id: 's3', Type: 'Episode', Name: 'The Long Night', SeriesName: 'Iron Valley', SeriesId: 's3', SeriesPrimaryImageTag: 'x', ParentIndexNumber: 1, IndexNumber: 4, UserData: { Played: false } },
+      s4: { Id: 's4', Type: 'Series', Name: 'Midnight Bakery', ProductionYear: 2024, ImageTags: { Primary: 'x' }, UserData: { Played: false, UnplayedItemCount: 24 } },
+      a1: { Id: 'a1', Type: 'Series', Name: 'Sky Pirates', ProductionYear: 2022, ImageTags: { Primary: 'x' }, UserData: { Played: false, UnplayedItemCount: 13 } },
+      a2: { Id: 'a2', Type: 'Series', Name: 'Moonlit Blade', ProductionYear: 2025, ImageTags: { Primary: 'x' }, UserData: { Played: false, UnplayedItemCount: 10 } },
+      a3: { Id: 'a3', Type: 'Movie', Name: 'Spirit Train', ProductionYear: 2020, ImageTags: { Primary: 'x' }, UserData: { Played: false } }
+    };
+    var D = function (id, h) { return { itemId: id, addedAt: '2026-10-31T' + (10 + h) + ':00:00Z' }; };
+    var LIST = { version: 1, categories: [
+      { id: 'c-1', name: 'Watch later', isDefault: true, items: [D('m1', 9), D('s1', 8), D('m2', 7), D('s2', 6), D('m3', 5), D('s3', 4), D('m4', 3), D('s4', 2), D('m5', 1)] },
+      { id: 'c-2', name: 'Anime', items: [D('a1', 3), D('a2', 2), D('a3', 1)] },
+      { id: 'c-3', name: 'Rewatch', items: [D('m2', 1)] },
+      { id: 'c-4', name: 'Movie night', items: [] }
+    ] };
+  }
+  if (!P.get('demo')) var LIST = { version: 1, categories: [
     { id: 'c-1', name: 'Später ansehen', isDefault: true, items: [{ itemId: 'b2', addedAt: '2026-10-31T11:00:00Z' }, { itemId: 'e5', addedAt: '2026-10-31T11:30:00Z' }].concat( [{ itemId: 'a1', addedAt: '2026-10-30T10:00:00Z' }, { itemId: 'c3', addedAt: '2026-10-31T10:00:00Z' }, { itemId: 'f6', addedAt: '2026-10-29T10:00:00Z' }, { itemId: 'g7', addedAt: '2026-10-28T10:00:00Z' }]) },
     { id: 'c-2', name: 'Anime', items: [{ itemId: 'b2', addedAt: '2026-10-31T09:00:00Z' }, { itemId: 'e5', addedAt: '2026-10-31T08:00:00Z' }] },
     { id: 'c-3', name: 'Movie night', items: [] }
@@ -131,6 +185,8 @@
     return Promise.resolve(new Response(null, { status: 204 }));
   };
 </script>
+<script>if (MODE === 'details') { document.querySelector('.demoDetailsPage').style.display = 'block'; document.querySelector('.demoDetail').remove(); document.querySelector('.skinHeader').classList.remove('noHomeButtonHeader'); document.getElementById('demoPoster').style.backgroundImage = 'url("' + poster('m1') + '")'; }</script>
+<script>if (P.get('demo') && document.querySelector('[data-demo-id]')) { var rb = document.querySelector('[data-demo-id]'); rb.setAttribute('data-id', rb.getAttribute('data-demo-id')); }</script>
 <script src="watchlist.js"></script>
 <script>
   // ---- Drive the UI for the screenshot ----

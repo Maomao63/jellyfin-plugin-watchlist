@@ -16,6 +16,35 @@ A personal **watchlist with categories** for Jellyfin.
 - English UI, German when Jellyfin is set to German
 - Follows the colors of your Jellyfin theme
 
+## Screenshots
+
+<p align="center">
+  <img src="assets/screenshots/watchlist-tab.png" alt="Watchlist with the default Watch later category, split into Movies and Series" width="900">
+  <br><em>The watchlist in the Modern layout – the built-in “Watch later” category is split into collapsible Movies and Series groups</em>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/watchlist-details.png" alt="Bookmark button next to the favorite heart on a details page" width="660">
+  <br><em>The bookmark button sits right next to the favorite heart</em>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/watchlist-dialog.png" alt="Dialog to choose categories" width="380">
+  <br><em>Pick one or more categories, or create a new one</em>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/watchlist-categories.png" alt="Managing categories" width="900">
+  <br><em>Create, rename, reorder and delete categories</em>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/watchlist-tab-light.png" alt="Watchlist with the built-in Light theme" width="900">
+  <br><em>Follows your Jellyfin theme – here the built-in Light theme</em>
+</p>
+
+<sub>Screenshots use fictional demo titles and generated posters.</sub>
+
 ## Compatibility
 
 - **Layouts:** the default *Modern* layout of Jellyfin 12 (link in the top bar) and the *Legacy* layouts (desktop/mobile, extra home tab). Direct link: `#/home?tab=2`

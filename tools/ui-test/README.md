@@ -9,6 +9,7 @@ jellyfin-web stylesheets and themes without signing in.
 ./shot.sh dark-tab   "theme=dark&mode=tab"
 ./shot.sh light-dlg  "theme=light&mode=dialog"
 ./shot.sh modern     "theme=dark&modern=1&mode=modernnav&lang=de"
+SIZE=1400,940 ./shot.sh readme "theme=dark&modern=1&mode=modernnav&demo=1&notrans=1"
 ```
 
 Query parameters:
@@ -16,9 +17,11 @@ Query parameters:
 | Parameter | Values |
 | --- | --- |
 | `theme` | `dark`, `light`, `appletv`, `purplehaze`, `elegantfin` |
-| `mode` | `home`, `tab`, `manage`, `dialog`, `legacyback`, `modernnav`, `modernfav` |
+| `mode` | `home`, `tab`, `manage`, `dialog`, `details`, `collapse`, `legacyback`, `modernnav`, `modernfav` |
 | `modern=1` | Modern layout top bar, legacy header hidden (`noskin=1`: legacy header removed) |
 | `lang=de` | German UI |
+| `demo=1` | Fictional demo titles and generated posters (used for the README screenshots) |
+| `notrans=1` | Disable CSS transitions (headless browsers may capture them mid-way) |
 
 `shot.sh` prints a JSON result (tab injected, bookmark buttons, visible tab content, nav links) and saves a
 screenshot in `out/`. `web/` and `out/` are not committed.
