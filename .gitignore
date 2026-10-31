@@ -1,0 +1,9 @@
+bin/
+obj/
+dist/
+build-tmp/
+*.user
+.vs/
+.idea/
+# local work log, not published
+ARBEITSPROTOKOLL.md

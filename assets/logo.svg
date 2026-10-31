@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b1033"/>
+      <stop offset="0.55" stop-color="#2a1550"/>
+      <stop offset="1" stop-color="#0b3a5c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#aa5cc3" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#aa5cc3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c77dff"/>
+      <stop offset="1" stop-color="#00a4dc"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <circle cx="620" cy="540" r="520" fill="url(#glow)"/>
+
+  <!-- stacked posters behind the bookmark (= categories) -->
+  <g filter="url(#shadow)">
+    <rect x="345" y="250" width="330" height="480" rx="34" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.18" stroke-width="4" transform="rotate(-12 510 490)"/>
+    <rect x="445" y="235" width="330" height="480" rx="34" fill="#ffffff" fill-opacity="0.16" stroke="#ffffff" stroke-opacity="0.25" stroke-width="4" transform="rotate(8 610 475)"/>
+    <!-- main bookmark -->
+    <path d="M470 270 h300 a40 40 0 0 1 40 40 v520 l-190 -128 l-190 128 v-520 a40 40 0 0 1 40 -40 z" fill="url(#mark)"/>
+    <!-- plus sign -->
+    <rect x="605" y="380" width="30" height="170" rx="15" fill="#ffffff"/>
+    <rect x="535" y="450" width="170" height="30" rx="15" fill="#ffffff"/>
+  </g>
+
+  <text x="930" y="560" font-family="Noto Sans, sans-serif" font-size="190" font-weight="700" fill="#ffffff" letter-spacing="-4">Watchlist</text>
+  <text x="936" y="660" font-family="Noto Sans, sans-serif" font-size="58" font-weight="400" fill="#ffffff" fill-opacity="0.72">for Jellyfin</text>
+</svg>

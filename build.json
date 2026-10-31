@@ -1,0 +1,10 @@
+{
+  "name": "Watchlist",
+  "guid": "941c7fff-f84c-452c-9d64-80d6b0ff62e6",
+  "owner": "Maomao63",
+  "category": "General",
+  "targetAbi": "12.4.0.0",
+  "overview": "Your personal watchlist with categories, right on the home screen",
+  "description": "Adds a Watchlist tab next to Home and Favorites on the home screen and a bookmark button next to every favorite heart (movies, series, seasons, episodes). Organize what you still want to watch in your own categories. Every user has their own list. Requires the File Transformation plugin.",
+  "changelog": "Renamed from Merkliste to Watchlist, English UI (German when Jellyfin is set to German), plugin icon, installable from a plugin repository."
+}
