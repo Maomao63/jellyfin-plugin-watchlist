@@ -1,0 +1,179 @@
+<!doctype html>
+<html dir="ltr" lang="en">
+<head>
+<meta charset="utf-8">
+<title>Watchlist harness</title>
+<link rel="stylesheet" href="1133.03edf3bb7ee048ee10be.css">
+<link rel="stylesheet" href="main.jellyfin.d0fe7ebed50c35511f89.css">
+<link rel="stylesheet" href="books.6b7ab6a1096d9e9f9f51.css">
+<link rel="stylesheet" href="90993.4504a59950367db8b4f3.css">
+<link rel="stylesheet" href="47472.ead193e1e4096120377c.css">
+<link rel="stylesheet" href="home-tsx.d3bf094b69e3b7e9a426.css">
+<script>
+  var P = new URLSearchParams(location.search);
+  var THEME = P.get('theme') || 'dark';
+  var MODE = P.get('mode') || 'home';
+  if (P.get('lang')) document.documentElement.lang = P.get('lang');
+  var base = THEME === 'elegantfin' ? 'dark' : THEME;
+  document.write('<link rel="stylesheet" href="themes/' + base + '/theme.css">');
+  if (THEME === 'elegantfin') document.write('<link rel="stylesheet" href="elegantfin.css">');
+  if (P.get('legacy')) document.documentElement.classList.add('layout-desktop');
+</script>
+<link rel="stylesheet" href="watchlist.css">
+<style>
+  /* Minimal stand-ins for layout bits normally set by jellyfin-web JS */
+  .skinHeader { position: fixed; top: 0; left: 0; right: 0; z-index: 10; padding: .5em 1em; }
+  .headerTabs { display: flex; justify-content: center; }
+  #indexPage { padding-top: 5em; }
+  .demoCards { display: flex; gap: 1em; padding: 1em 3.3%; }
+  .demoCard { width: 160px; }
+  .demoDetail { padding: 1em 3.3%; }
+</style>
+</head>
+<body class="force-scroll">
+<header id="modernBar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:20;height:48px;align-items:center;gap:.25em;padding:0 1em;background:#1a2030;color:#fff;font-family:sans-serif">
+  <a class="MuiButton-root MuiButton-text MuiButton-colorInherit" href="#/home" style="color:inherit;text-decoration:none;font-weight:700;margin-right:1em">Jellyfin</a>
+  <a class="MuiButton-root MuiButton-text MuiButton-colorInherit" href="#/home?tab=1" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:6px 8px"><span class="MuiButton-startIcon"><svg class="MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"></path></svg></span>Favoriten</a>
+  <a class="MuiButton-root MuiButton-text MuiButton-colorInherit" href="#/tv?topParentId=x" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:6px 8px"><span class="MuiButton-startIcon"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2m0 14H3V5h18z"></path></svg></span>Anime</a>
+</header>
+<div id="legacyHeaderWrap"><div class="skinHeader skinHeader-withBackground noHomeButtonHeader">
+  <div class="headerTabs sectionTabs">
+    <div is="emby-tabs" class="tabs-viewmenubar emby-tabs">
+      <div class="emby-tabs-slider" style="white-space:nowrap;">
+        <button type="button" is="emby-button" class="emby-tab-button emby-button emby-tab-button-active" data-index="0"><div class="emby-button-foreground">Home</div></button>
+        <button type="button" is="emby-button" class="emby-tab-button emby-button" data-index="1"><div class="emby-button-foreground">Favorites</div></button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>if (P.get('modern')) { document.getElementById('modernBar').style.display = 'flex'; document.getElementById('legacyHeaderWrap').style.display = 'none'; if (P.get('noskin')) document.getElementById('legacyHeaderWrap').remove(); }</script>
+<div class="mainAnimatedPages skinBody">
+  <div id="indexPage" class="page mainAnimatedPage homePage libraryPage allLibraryPage pageWithAbsoluteTabs withTabs">
+    <div class="tabContent pageTabContent is-active" id="homeTab" data-index="0">
+      <div class="sections">
+        <div class="demoDetail">
+          <div class="mainDetailButtons detailButtons">
+            <button is="emby-ratingbutton" type="button" class="button-flat btnUserRating detailButton emby-button" data-id="a1" title="Favorite"><div class="detailButton-content"><span class="material-icons detailButton-icon favorite" aria-hidden="true"></span></div></button>
+          </div>
+        </div>
+        <div class="demoCards">
+          <div class="card portraitCard demoCard"><div class="cardBox cardBox-bottompadded"><div class="cardScalable"><div class="cardPadder cardPadder-portrait"></div><div class="cardImageContainer coveredImage cardContent" style="background:#556"></div>
+            <div class="cardOverlayContainer itemAction" style="opacity:1"><div class="cardOverlayButton-br flex">
+              <button is="emby-ratingbutton" type="button" class="cardOverlayButton cardOverlayButton-hover itemAction paper-icon-button-light" data-id="b2" data-itemtype="Series"><span class="material-icons cardOverlayButtonIcon cardOverlayButtonIcon-hover favorite" aria-hidden="true"></span></button>
+            </div></div></div><div class="cardText">Card</div></div></div>
+        </div>
+        <div class="listItem listItem-border" style="margin:0 3.3%">
+          <div class="listItemBody"><div class="listItemBodyText">S01E03 · Episode</div></div>
+          <button is="emby-ratingbutton" type="button" class="listItemButton paper-icon-button-light" data-id="c3" data-itemtype="Episode"><span class="material-icons favorite" aria-hidden="true"></span></button>
+        </div>
+      </div>
+    </div>
+    <div class="tabContent pageTabContent" id="favoritesTab" data-index="1"><div class="sections"></div></div>
+  </div>
+</div>
+
+<script>
+  // ---- Mock ApiClient + server ----
+  var colors = ['#7b3fa0', '#1f6fa8', '#a8461f', '#2e8b57', '#8b2e5a', '#555'];
+  function poster(id) {
+    var c = colors[id.charCodeAt(1) % colors.length];
+    return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="' + c + '"/><text x="100" y="160" font-size="40" text-anchor="middle" fill="white" font-family="sans-serif">' + id + '</text></svg>');
+  }
+  var ITEMS = {
+    a1: { Id: 'a1', Type: 'Movie', Name: 'Dune: Part Two', ProductionYear: 2024, ImageTags: { Primary: 'x' }, UserData: { Played: false } },
+    b2: { Id: 'b2', Type: 'Series', Name: 'Frieren', ProductionYear: 2023, ImageTags: { Primary: 'x' }, UserData: { Played: false, UnplayedItemCount: 12 } },
+    c3: { Id: 'c3', Type: 'Episode', Name: 'The Kingdom', SeriesName: 'Shogun', SeriesId: 'd4', SeriesPrimaryImageTag: 'x', ParentIndexNumber: 1, IndexNumber: 3, UserData: { Played: false } },
+    e5: { Id: 'e5', Type: 'Season', Name: 'Season 2', SeriesName: 'Arcane', SeriesId: 'e5', ImageTags: { Primary: 'x' }, UserData: { Played: false, UnplayedItemCount: 9 } },
+    f6: { Id: 'f6', Type: 'Movie', Name: 'Oppenheimer – a very long title that should be cut off', ProductionYear: 2023, ImageTags: { Primary: 'x' }, UserData: { Played: true } },
+    g7: { Id: 'g7', Type: 'Movie', Name: 'No Image Movie', ProductionYear: 2020, ImageTags: {}, UserData: { Played: false } }
+  };
+  var LIST = { version: 1, categories: [
+    { id: 'c-1', name: 'Watch later', items: [{ itemId: 'a1', addedAt: '2026-10-30T10:00:00Z' }, { itemId: 'c3', addedAt: '2026-10-31T10:00:00Z' }, { itemId: 'f6', addedAt: '2026-10-29T10:00:00Z' }, { itemId: 'g7', addedAt: '2026-10-28T10:00:00Z' }] },
+    { id: 'c-2', name: 'Anime', items: [{ itemId: 'b2', addedAt: '2026-10-31T09:00:00Z' }, { itemId: 'e5', addedAt: '2026-10-31T08:00:00Z' }] },
+    { id: 'c-3', name: 'Movie night', items: [] }
+  ] };
+  window.ApiClient = {
+    accessToken: function () { return 't'; },
+    getCurrentUserId: function () { return 'u1'; },
+    serverId: function () { return 's1'; },
+    getUrl: function (path, params) {
+      var m = /Items\/(\w+)\/Images/.exec(path);
+      if (m) return poster(m[1]);
+      return 'mock://' + path + (params ? '?' + new URLSearchParams(params) : '');
+    }
+  };
+  function json(o) { return Promise.resolve(new Response(JSON.stringify(o), { status: 200, headers: { 'Content-Type': 'application/json' } })); }
+  window.fetch = function (url, opts) {
+    url = String(url);
+    var method = (opts && opts.method) || 'GET';
+    if (url.indexOf('mock://Items?') === 0) {
+      var ids = new URL(url.replace('mock://', 'http://x/')).searchParams.get('ids').split(',');
+      return json({ Items: ids.map(function (i) { return ITEMS[i]; }).filter(Boolean) });
+    }
+    if (url === 'mock://Watchlist' && method === 'GET') return json(LIST);
+    var mi = /mock:\/\/Watchlist\/Items\/(\w+)/.exec(url);
+    if (mi) {
+      var want = JSON.parse(opts.body).categoryIds;
+      LIST.categories.forEach(function (c) {
+        var has = c.items.some(function (e) { return e.itemId === mi[1]; });
+        if (want.indexOf(c.id) !== -1 && !has) c.items.push({ itemId: mi[1], addedAt: new Date().toISOString() });
+        if (want.indexOf(c.id) === -1 && has) c.items = c.items.filter(function (e) { return e.itemId !== mi[1]; });
+      });
+      return json(LIST);
+    }
+    if (url === 'mock://Watchlist/Categories' && method === 'POST') {
+      var cat = { id: 'c-' + Date.now(), name: JSON.parse(opts.body).name, items: [] };
+      LIST.categories.push(cat);
+      return json(cat);
+    }
+    return Promise.resolve(new Response(null, { status: 204 }));
+  };
+</script>
+<script src="watchlist.js"></script>
+<script>
+  // ---- Drive the UI for the screenshot ----
+  setTimeout(function () {
+    if (MODE === 'tab' || MODE === 'manage') {
+      document.querySelector('.wlTabButton').click();
+      if (MODE === 'manage') setTimeout(function () { document.querySelector('[data-wl-action=manage]').click(); }, 400);
+    } else if (MODE === 'dialog') {
+      document.querySelector('.btnUserRating + .wlBookmarkBtn').click();
+    } else if (MODE === 'modernnav') {
+      document.querySelector('#modernBar .wlNavLink').click();
+    } else if (MODE === 'modernfav') {
+      // open watchlist, then go to favorites like Jellyfin would (tab bar selects index 1)
+      document.querySelector('#modernBar .wlNavLink').click();
+      setTimeout(function () {
+        location.hash = '#/home?tab=1';
+        var fav = document.querySelector('.emby-tab-button[data-index="1"]');
+        var tabs = document.querySelector('.emby-tabs');
+        var cur = tabs.querySelector('.emby-tab-button-active');
+        cur.classList.remove('emby-tab-button-active'); fav.classList.add('emby-tab-button-active');
+        tabs.dispatchEvent(new CustomEvent('beforetabchange', { detail: { selectedTabIndex: 1, previousIndex: 2 } }));
+        document.querySelectorAll('#indexPage > .tabContent').forEach(function (t) { t.classList.toggle('is-active', t.id === 'favoritesTab'); });
+      }, 700);
+    } else if (MODE === 'legacyback') {
+      // Legacy: tab active, then tabs re-rendered by mainTabsManager (our button gone, Home selected again)
+      document.querySelector('.wlTabButton').click();
+      setTimeout(function () {
+        var slider = document.querySelector('.emby-tabs-slider');
+        slider.innerHTML = '<button type="button" class="emby-tab-button emby-button emby-tab-button-active" data-index="0"><div class="emby-button-foreground">Home</div></button><button type="button" class="emby-tab-button emby-button" data-index="1"><div class="emby-button-foreground">Favorites</div></button>';
+        document.querySelector('#homeTab').classList.add('is-active');
+      }, 600);
+    }
+  }, 600);
+  setTimeout(function () {
+    var r = {
+      tab: !!document.querySelector('.wlTabButton'),
+      bookmarks: document.querySelectorAll('.wlBookmarkBtn').length,
+      active: Array.from(document.querySelectorAll('.wlBookmarkBtn.wlActive')).map(function (b) { return b.getAttribute('data-wl-id'); }),
+      visibleTabs: Array.from(document.querySelectorAll('#indexPage > .tabContent')).filter(function (t) { return getComputedStyle(t).display !== 'none'; }).map(function (t) { return t.id || t.className; }),
+      light: document.documentElement.classList.contains('wl-light'),
+      navLinks: Array.from(document.querySelectorAll('.wlNavLink')).map(function (l) { return l.textContent.trim() + '|' + l.getAttribute('href') + (l.classList.contains('wlNavLink-active') ? '|active' : ''); })
+    };
+    document.title = 'RESULT ' + JSON.stringify(r);
+  }, 2200);
+</script>
+</body>
+</html>

@@ -7,3 +7,5 @@ build-tmp/
 .idea/
 # local work log, not published
 ARBEITSPROTOKOLL.md
+tools/ui-test/web/
+tools/ui-test/out/
