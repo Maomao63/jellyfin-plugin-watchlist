@@ -2,6 +2,14 @@
   {
     "versions": [
       {
+        "version": "1.2.0.0",
+        "changelog": "Fixed the Watchlist tab not loading (error 't is not a function'). Colors now follow the Jellyfin theme (Light, Apple TV and all other built-in themes). Fixed the watchlist staying visible next to Home in the legacy layout. Last German text in the category manager translated.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/Maomao63/jellyfin-plugin-watchlist/releases/download/v1.2.0.0/watchlist_1.2.0.0.zip",
+        "checksum": "603ddefa552e6c05c49025ea5e836d4a",
+        "timestamp": "2026-10-31T14:25:09Z"
+      },
+      {
         "version": "1.1.0.0",
         "changelog": "Renamed from Merkliste to Watchlist, English UI (German when Jellyfin is set to German), plugin icon, installable from a plugin repository.",
         "targetAbi": "12.4.0.0",
