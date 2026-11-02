@@ -2,6 +2,14 @@
   {
     "versions": [
       {
+        "version": "1.4.2.0",
+        "changelog": "Fix: the Watchlist tab was missing after going back to the home screen from a library page (only came back after reloading the page).",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/Maomao63/jellyfin-plugin-watchlist/releases/download/v1.4.2.0/watchlist_1.4.2.0.zip",
+        "checksum": "50ddf617d63e4fc43697d463e4abde3b",
+        "timestamp": "2026-11-02T22:04:43Z"
+      },
+      {
         "version": "1.4.1.0",
         "changelog": "Overview ('All') now shows only the 8 most recently added items per category (per Movies/Series group in Watch later) in a single scrollable row, like the Favorites rows. 'Show all' opens the full category.",
         "targetAbi": "12.4.0.0",
