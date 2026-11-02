@@ -6,5 +6,5 @@
   "targetAbi": "12.4.0.0",
   "overview": "Your personal watchlist with categories, right on the home screen",
   "description": "Adds a Watchlist tab next to Home and Favorites on the home screen and a bookmark button next to every favorite heart (movies, series, seasons, episodes). Organize what you still want to watch in your own categories. Every user has their own list. Requires the File Transformation plugin.",
-  "changelog": "Overview ('All') now shows only the 8 most recently added items per category (per Movies/Series group in Watch later) in a single scrollable row, like the Favorites rows. 'Show all' opens the full category."
+  "changelog": "Fix: the Watchlist tab was missing after going back to the home screen from a library page (only came back after reloading the page)."
 }

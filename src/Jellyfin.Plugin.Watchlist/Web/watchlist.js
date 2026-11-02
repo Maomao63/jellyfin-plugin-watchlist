@@ -462,8 +462,10 @@
     // ---------- Home screen tab ----------
 
     function homeActive() {
-        var page = document.querySelector('#indexPage');
-        if (!page || page.classList.contains('hide')) return null;
+        // After visiting a library page Jellyfin may keep the old home page hidden in the DOM
+        // next to the new one, so look for the visible one.
+        var page = document.querySelector('#indexPage:not(.hide)');
+        if (!page) return null;
         // The home page sets this class on the (in the Modern layout hidden) legacy header while it is active.
         var header = document.querySelector('.skinHeader');
         if (header && header.classList.contains('noHomeButtonHeader')) return page;
@@ -510,8 +512,7 @@
             tabs.__wlHooked = true;
             tabs.addEventListener('beforetabchange', function () {
                 session(SESSION_KEY, '0');
-                var own = document.querySelector('.wlTabContent');
-                if (own) own.classList.remove('is-active');
+                document.querySelectorAll('.wlTabContent').forEach(function (own) { own.classList.remove('is-active'); });
             });
         }
 
@@ -646,21 +647,20 @@
         if (homeTabParam() !== '2') {
             // Without a tab bar nothing else hides our content when the URL switches to another tab
             if (state.urlOpened && !document.querySelector('.wlTabButton')) {
-                var own = document.querySelector('.wlTabContent.is-active');
-                if (own) own.classList.remove('is-active');
+                document.querySelectorAll('.wlTabContent.is-active').forEach(function (own) { own.classList.remove('is-active'); });
             }
             state.urlOpened = null;
             return;
         }
         if (state.urlOpened === location.hash) return;
-        if (!document.querySelector('.wlTabContent')) return;
+        if (!homeActive().querySelector('.wlTabContent')) return;
         state.urlOpened = location.hash;
         activateTab();
     }
 
     function tabVisible() {
-        var content = document.querySelector('.wlTabContent.is-active');
-        return content && homeActive() ? content : null;
+        var page = homeActive();
+        return page ? page.querySelector('.wlTabContent.is-active') : null;
     }
 
     function rerenderTab() {
