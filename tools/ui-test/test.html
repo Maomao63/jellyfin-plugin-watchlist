@@ -160,6 +160,8 @@
       LIST.categories[1].items.push({ itemId: 'y' + k, addedAt: '2026-11-02T' + String(10 + k).padStart(2, '0') + ':00:00Z' });
     }
   }
+  // Items in an anime library (Watchlist/Anime endpoint)
+  var ANIME = P.get('demo') ? ['a1', 'a2', 'a3'] : ['b2'];
   window.ApiClient = {
     accessToken: function () { return 't'; },
     getCurrentUserId: function () { return 'u1'; },
@@ -179,6 +181,7 @@
       return json({ Items: ids.map(function (i) { return ITEMS[i]; }).filter(Boolean) });
     }
     if (url === 'mock://Watchlist' && method === 'GET') return json(LIST);
+    if (url === 'mock://Watchlist/Anime' && method === 'GET') return json(ANIME);
     var mi = /mock:\/\/Watchlist\/Items\/(\w+)/.exec(url);
     if (mi) {
       var want = JSON.parse(opts.body).categoryIds;

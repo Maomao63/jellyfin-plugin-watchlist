@@ -202,6 +202,49 @@ public class WatchlistController : ControllerBase
         }).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Returns the ids of watchlist items that live in an anime library
+    /// (a library whose name contains "anime", e.g. "Anime" or "Anime-Movies").
+    /// </summary>
+    [HttpGet("Anime")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<Guid>>> GetAnimeItems()
+    {
+        if (!TryGetUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var list = await _store.GetAsync(userId).ConfigureAwait(false);
+        var animeLibraries = new Dictionary<Guid, bool>();
+        var result = new List<Guid>();
+        foreach (var itemId in list.Categories.SelectMany(c => c.Items).Select(i => i.ItemId).Distinct())
+        {
+            var item = _libraryManager.GetItemById(itemId);
+            if (item is null)
+            {
+                continue;
+            }
+
+            var inAnime = _libraryManager.GetCollectionFolders(item).Any(folder =>
+            {
+                if (!animeLibraries.TryGetValue(folder.Id, out var isAnime))
+                {
+                    isAnime = folder.Name?.Contains("anime", StringComparison.OrdinalIgnoreCase) ?? false;
+                    animeLibraries[folder.Id] = isAnime;
+                }
+
+                return isAnime;
+            });
+            if (inAnime)
+            {
+                result.Add(itemId);
+            }
+        }
+
+        return result;
+    }
+
     [HttpGet("client.js")]
     [AllowAnonymous]
     public ActionResult GetScript() => Resource("watchlist.js", "application/javascript");

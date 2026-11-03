@@ -50,6 +50,7 @@
             defaultCategory: 'Watch later',
             movies: 'Movies',
             shows: 'Series',
+            anime: 'Anime',
             other: 'Other',
             defaultLocked: 'The default category cannot be renamed or deleted.',
             showAll: 'Show all'
@@ -94,6 +95,7 @@
             defaultCategory: 'Später ansehen',
             movies: 'Filme',
             shows: 'Serien',
+            anime: 'Anime',
             other: 'Sonstiges',
             defaultLocked: 'Die Standardkategorie kann nicht umbenannt oder gelöscht werden.',
             showAll: 'Alle anzeigen'
@@ -759,7 +761,14 @@
 
         loadList(true).then(function () {
             var ids = Array.from(state.itemCats.keys());
-            return ids.length ? fetchItems(ids) : new Map();
+            if (!ids.length) return new Map();
+            return Promise.all([fetchItems(ids), fetchAnimeIds()]).then(function (r) {
+                r[1].forEach(function (id) {
+                    var item = r[0].get(normId(id));
+                    if (item) item.__wlAnime = true;
+                });
+                return r[0];
+            });
         }).then(function (items) {
             if (token !== content.__wlToken) return;
             drawTab(content, items);
@@ -772,14 +781,21 @@
         return cat.isDefault ? t('defaultCategory') : cat.name;
     }
 
-    // Groups inside the default category, decided by the Jellyfin item type
+    // Ids of watchlist items in an anime library (library name contains "anime"); empty on error
+    function fetchAnimeIds() {
+        return api('GET', 'Anime').then(function (ids) { return ids || []; }, function () { return []; });
+    }
+
+    // Groups inside the default category: anime by library, everything else by the Jellyfin item type
     var GROUPS = [
         { key: 'movies', label: 'movies', types: ['Movie'] },
         { key: 'shows', label: 'shows', types: ['Series', 'Season', 'Episode'] },
+        { key: 'anime', label: 'anime', types: [] },
         { key: 'other', label: 'other', types: null }
     ];
 
     function groupOf(item) {
+        if (item.__wlAnime) return 'anime';
         for (var i = 0; i < GROUPS.length; i++) {
             if (!GROUPS[i].types || GROUPS[i].types.indexOf(item.Type) !== -1) return GROUPS[i].key;
         }
