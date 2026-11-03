@@ -2,6 +2,14 @@
   {
     "versions": [
       {
+        "version": "1.5.0.0",
+        "changelog": "New: \"Watch later\" now has an Anime group. Movies and series from a library whose name contains \"anime\" (e.g. \"Anime\", \"Anime-Movie\") are shown there instead of under Movies/Series.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/Maomao63/jellyfin-plugin-watchlist/releases/download/v1.5.0.0/watchlist_1.5.0.0.zip",
+        "checksum": "9f83df3b4a1d4981bd3e07380808fa92",
+        "timestamp": "2026-11-03T21:25:47Z"
+      },
+      {
         "version": "1.4.2.0",
         "changelog": "Fix: the Watchlist tab was missing after going back to the home screen from a library page (only came back after reloading the page).",
         "targetAbi": "12.4.0.0",
