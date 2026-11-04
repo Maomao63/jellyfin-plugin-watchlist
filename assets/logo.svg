@@ -1,37 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1b1033"/>
-      <stop offset="0.55" stop-color="#2a1550"/>
-      <stop offset="1" stop-color="#0b3a5c"/>
-    </linearGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#aa5cc3" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="#aa5cc3" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#c77dff"/>
-      <stop offset="1" stop-color="#00a4dc"/>
-    </linearGradient>
-    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity="0.45"/>
-    </filter>
-  </defs>
-
-  <rect width="1920" height="1080" fill="url(#bg)"/>
-  <circle cx="620" cy="540" r="520" fill="url(#glow)"/>
-
-  <!-- stacked posters behind the bookmark (= categories) -->
-  <g filter="url(#shadow)">
-    <rect x="345" y="250" width="330" height="480" rx="34" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.18" stroke-width="4" transform="rotate(-12 510 490)"/>
-    <rect x="445" y="235" width="330" height="480" rx="34" fill="#ffffff" fill-opacity="0.16" stroke="#ffffff" stroke-opacity="0.25" stroke-width="4" transform="rotate(8 610 475)"/>
-    <!-- main bookmark -->
-    <path d="M470 270 h300 a40 40 0 0 1 40 40 v520 l-190 -128 l-190 128 v-520 a40 40 0 0 1 40 -40 z" fill="url(#mark)"/>
-    <!-- plus sign -->
-    <rect x="605" y="380" width="30" height="170" rx="15" fill="#ffffff"/>
-    <rect x="535" y="450" width="170" height="30" rx="15" fill="#ffffff"/>
+  <!-- Watchlist for Jellyfin logo: one card with a bookmark -->
+  <defs><clipPath id="c"><rect width="360" height="520" rx="28"/></clipPath></defs><rect width="1920" height="1080" fill="#1e1b18"/>
+<g transform="translate(300 280) rotate(-6 180 260)">
+  <rect x="20" y="22" width="360" height="520" rx="28" fill="#0d0b0a"/>
+  <g clip-path="url(#c)">
+    <rect width="360" height="520" fill="#d1495b"/>
+    <circle cx="300" cy="80" r="150" fill="#8e2c3a" opacity="0.55"/>
+    <rect y="440" width="360" height="80" fill="#8e2c3a"/>
   </g>
-
-  <text x="930" y="560" font-family="Noto Sans, sans-serif" font-size="190" font-weight="700" fill="#ffffff" letter-spacing="-4">Watchlist</text>
-  <text x="936" y="660" font-family="Noto Sans, sans-serif" font-size="58" font-weight="400" fill="#ffffff" fill-opacity="0.72">for Jellyfin</text>
-</svg>
+  <rect width="360" height="520" rx="28" fill="none" stroke="#0d0b0a" stroke-width="7"/>
+  <g transform="translate(95 95)">
+    <path d="M0 0 h170 v300 l-85 -62 l-85 62 z" fill="#0d0b0a" transform="translate(14 14)"/>
+    <path d="M0 0 h170 v300 l-85 -62 l-85 62 z" fill="#edae49" stroke="#0d0b0a" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M45 125 l30 30 l52 -58" fill="none" stroke="#22201c" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</g>
+<text x="790" y="545" font-family="Noto Sans" font-size="158" font-weight="800" fill="#f4ede1" letter-spacing="-3">Watchlist</text><rect x="796" y="590" width="120" height="10" rx="5" fill="#edae49"/><text x="796" y="676" font-family="Noto Sans" font-size="52" font-weight="500" fill="#a89f91">for Jellyfin</text></svg>
