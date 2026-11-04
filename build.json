@@ -6,5 +6,5 @@
   "targetAbi": "12.4.0.0",
   "overview": "Your personal watchlist with categories, right on the home screen",
   "description": "Adds a Watchlist tab next to Home and Favorites on the home screen and a bookmark button next to every favorite heart (movies, series, seasons, episodes). Organize what you still want to watch in your own categories. Every user has their own list. Requires the File Transformation plugin.",
-  "changelog": "New: \"Watch later\" now has an Anime group. Movies and series from a library whose name contains \"anime\" (e.g. \"Anime\", \"Anime-Movie\") are shown there instead of under Movies/Series."
+  "changelog": "New: Watchlist now speaks 19 languages and follows the display language set in Jellyfin (French, Spanish, Italian, Dutch, Portuguese, Polish, Swedish, Danish, Norwegian, Czech, Russian, Ukrainian, Turkish, Japanese, Korean, Chinese and more). English remains the fallback."
 }

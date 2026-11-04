@@ -19,6 +19,7 @@
   <a href="#-install"><b>Install</b></a> ·
   <a href="#-features"><b>Features</b></a> ·
   <a href="#-compatibility"><b>Compatibility</b></a> ·
+  <a href="#-languages"><b>Languages</b></a> ·
   <a href="#-faq"><b>FAQ</b></a> ·
   <a href="https://github.com/Maomao63/jellyfin-plugin-watchlist/discussions"><b>Discussions</b></a>
 </p>
@@ -62,7 +63,7 @@ That's it – **Watchlist** now shows up right after *Favorites*. No configurati
 ### 🏠 Feels like part of Jellyfin
 - **Watchlist** link right after *Favorites* – in the top bar (*Modern* layout), in the side menu, or as a home tab (*Legacy* layouts)
 - Follows the colors of your theme
-- English UI, German when Jellyfin is set to German
+- **Speaks your language:** follows the display language each user has set in Jellyfin ([19 languages](#-languages), English as fallback)
 - **Every user has their own list**
 
 ## 🧩 Compatibility
@@ -75,6 +76,18 @@ That's it – **Watchlist** now shows up right after *Favorites*. No configurati
 | **CSS themes** | Tested with [ElegantFin](https://github.com/lscambo13/ElegantFin) (tab gets a matching icon). Others should work if they keep Jellyfin's standard classes |
 | **Clients** | Everything that uses the Jellyfin web UI: browser, Jellyfin Media Player, … |
 | **TV layout** | Should work, not tested on TV devices or with a remote yet |
+
+## 🌍 Languages
+
+Watchlist switches automatically to the display language each user has chosen in Jellyfin
+(*User settings → Display → Display language*). If a language is not available yet, it falls back to English.
+
+English · Deutsch · Français · Español · Italiano · Nederlands · Português · Polski · Svenska · Dansk · Norsk ·
+Čeština · Русский · Українська · Türkçe · 日本語 · 한국어 · 简体中文 · 繁體中文
+
+Spotted a clumsy translation or missing your language? Open an [issue](https://github.com/Maomao63/jellyfin-plugin-watchlist/issues) –
+all texts live in one place at the top of
+[`watchlist.js`](src/Jellyfin.Plugin.Watchlist/Web/watchlist.js).
 
 ## ❓ FAQ
 
