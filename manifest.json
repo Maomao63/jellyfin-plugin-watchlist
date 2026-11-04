@@ -2,6 +2,14 @@
   {
     "versions": [
       {
+        "version": "1.6.0.0",
+        "changelog": "New: Watchlist now speaks 19 languages and follows the display language set in Jellyfin (French, Spanish, Italian, Dutch, Portuguese, Polish, Swedish, Danish, Norwegian, Czech, Russian, Ukrainian, Turkish, Japanese, Korean, Chinese and more). English remains the fallback.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/Maomao63/jellyfin-plugin-watchlist/releases/download/v1.6.0.0/watchlist_1.6.0.0.zip",
+        "checksum": "f24e2a7a616a2a9f64efd2d586097b43",
+        "timestamp": "2026-11-04T17:40:42Z"
+      },
+      {
         "version": "1.5.0.0",
         "changelog": "New: \"Watch later\" now has an Anime group. Movies and series from a library whose name contains \"anime\" (e.g. \"Anime\", \"Anime-Movie\") are shown there instead of under Movies/Series.",
         "targetAbi": "12.4.0.0",
