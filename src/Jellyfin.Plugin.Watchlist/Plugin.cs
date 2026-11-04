@@ -22,5 +22,5 @@ public class Plugin : BasePlugin<PluginConfiguration>
 
     public override Guid Id => Guid.Parse("941c7fff-f84c-452c-9d64-80d6b0ff62e6");
 
-    public override string Description => "Personal watchlist with custom categories as a tab on the home screen.";
+    public override string Description => "Your personal watchlist with categories, right on the home screen.";
 }
