@@ -2,6 +2,14 @@
   {
     "versions": [
       {
+        "version": "1.6.2.0",
+        "changelog": "Episodes now show as bookmarked when their series is on your watchlist (e.g. the newest episode in \"Latest\" on the home screen). Clicking the bookmark there opens the series.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/Maomao63/jellyfin-plugin-watchlist/releases/download/v1.6.2.0/watchlist_1.6.2.0.zip",
+        "checksum": "0c1f2f41ffada3a33c5fbb5539078c39",
+        "timestamp": "2026-11-12T00:28:53Z"
+      },
+      {
         "version": "1.6.1.0",
         "changelog": "Fix: the plugin page in the dashboard now shows the logo and the correct version again.",
         "targetAbi": "12.4.0.0",
