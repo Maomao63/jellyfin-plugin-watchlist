@@ -81,6 +81,11 @@
             <div class="cardOverlayContainer itemAction" style="opacity:1"><div class="cardOverlayButton-br flex">
               <button is="emby-ratingbutton" type="button" class="cardOverlayButton cardOverlayButton-hover itemAction paper-icon-button-light" data-id="b2" data-itemtype="Series"><span class="material-icons cardOverlayButtonIcon cardOverlayButtonIcon-hover favorite" aria-hidden="true"></span></button>
             </div></div></div><div class="cardText">Card</div></div></div>
+          <div class="card portraitCard demoCard" data-type="Episode"><div class="cardBox cardBox-bottompadded"><div class="cardScalable"><div class="cardPadder cardPadder-portrait"></div><div class="cardImageContainer coveredImage cardContent" style="background:#565"></div>
+            <div class="cardOverlayContainer itemAction" style="opacity:1"><div class="cardOverlayButton-br flex">
+              <button is="emby-ratingbutton" type="button" class="cardOverlayButton cardOverlayButton-hover itemAction paper-icon-button-light" data-id="ep9" data-itemtype="Episode"><span class="material-icons cardOverlayButtonIcon cardOverlayButtonIcon-hover favorite" aria-hidden="true"></span></button>
+              <button is="emby-ratingbutton" type="button" class="cardOverlayButton cardOverlayButton-hover itemAction paper-icon-button-light" data-id="ep8" data-itemtype="Episode"><span class="material-icons cardOverlayButtonIcon cardOverlayButtonIcon-hover favorite" aria-hidden="true"></span></button>
+            </div></div></div><div class="cardText">Episode cards (series on list / not)</div></div></div>
         </div>
         <div class="listItem listItem-border" style="margin:0 3.3%">
           <div class="listItemBody"><div class="listItemBodyText">S01E03 · Episode</div></div>
@@ -101,6 +106,8 @@
   }
   var ITEMS = {
     a1: { Id: 'a1', Type: 'Movie', Name: 'Dune: Part Two', ProductionYear: 2024, ImageTags: { Primary: 'x' }, UserData: { Played: false } },
+    ep9: { Id: 'ep9', Type: 'Episode', Name: 'Episode 6', SeriesId: 'b2', SeriesName: 'Frieren', UserData: { Played: false } },
+    ep8: { Id: 'ep8', Type: 'Episode', Name: 'Episode 2', SeriesId: 'zz', SeriesName: 'Other', UserData: { Played: false } },
     b2: { Id: 'b2', Type: 'Series', Name: 'Frieren', ProductionYear: 2023, ImageTags: { Primary: 'x' }, UserData: { Played: false, UnplayedItemCount: 12 } },
     c3: { Id: 'c3', Type: 'Episode', Name: 'The Kingdom', SeriesName: 'Shogun', SeriesId: 'd4', SeriesPrimaryImageTag: 'x', ParentIndexNumber: 1, IndexNumber: 3, UserData: { Played: false } },
     e5: { Id: 'e5', Type: 'Season', Name: 'Season 2', SeriesName: 'Arcane', SeriesId: 'e5', ImageTags: { Primary: 'x' }, UserData: { Played: false, UnplayedItemCount: 9 } },

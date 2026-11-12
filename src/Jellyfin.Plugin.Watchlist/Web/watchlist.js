@@ -891,7 +891,9 @@
         filter: 'all',
         manage: false,
         lastPopstate: 0,
-        urlOpened: null
+        urlOpened: null,
+        seriesOf: new Map(),     // itemId -> seriesId of an episode ('' = not an episode / unknown)
+        seriesPending: new Set()
     };
 
     var prefs = loadPrefs();
@@ -1084,10 +1086,60 @@
         btn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            var id = itemIdFor(ratingBtn);
+            var id = dialogIdFor(btn) || itemIdFor(ratingBtn);
             if (id) openDialog(id);
         });
         return btn;
+    }
+
+    // Episodes count as on the list when their series is. Their series id is looked up once per episode.
+    function itemTypeFor(ratingBtn) {
+        var card = ratingBtn.closest('[data-type]');
+        return ratingBtn.getAttribute('data-itemtype') || (card && card.getAttribute('data-type')) || '';
+    }
+
+    function seriesIdFor(ratingBtn, id) {
+        if (!id) return '';
+        var type = itemTypeFor(ratingBtn);
+        // Details page buttons carry no type -> look it up as well
+        if (type !== 'Episode' && !(type === '' && ratingBtn.classList.contains('btnUserRating'))) return '';
+        var series = state.seriesOf.get(id);
+        if (series === undefined) {
+            requestSeries(id);
+            return '';
+        }
+        return series;
+    }
+
+    var seriesTimer = null;
+    function requestSeries(id) {
+        if (state.seriesPending.has(id)) return;
+        state.seriesPending.add(id);
+        if (seriesTimer) return;
+        seriesTimer = setTimeout(function () {
+            seriesTimer = null;
+            var ids = Array.from(state.seriesPending);
+            fetchItems(ids).then(function (items) {
+                ids.forEach(function (eid) {
+                    var item = items.get(eid);
+                    state.seriesOf.set(eid, item && item.Type === 'Episode' && item.SeriesId ? normId(item.SeriesId) : '');
+                });
+            }).catch(function () {
+                ids.forEach(function (eid) { state.seriesOf.set(eid, ''); });
+            }).finally(function () {
+                ids.forEach(function (eid) { state.seriesPending.delete(eid); });
+                scanButtons();
+                refreshButtons();
+            });
+        }, 50);
+    }
+
+    // The episode itself if it is on the list, else its series if that is, else the episode (to add it)
+    function dialogIdFor(btn) {
+        var id = btn.getAttribute('data-wl-id');
+        var series = btn.getAttribute('data-wl-series');
+        if (id && !state.itemCats.has(id) && series && state.itemCats.has(series)) return series;
+        return id;
     }
 
     function scanButtons() {
@@ -1103,13 +1155,19 @@
             setClass(btn, 'hide', ratingBtn.classList.contains('hide'));
             var id = itemIdFor(ratingBtn);
             if (btn.getAttribute('data-wl-id') !== id) btn.setAttribute('data-wl-id', id);
+            var series = seriesIdFor(ratingBtn, id);
+            if ((btn.getAttribute('data-wl-series') || '') !== series) {
+                if (series) btn.setAttribute('data-wl-series', series);
+                else btn.removeAttribute('data-wl-series');
+            }
         });
     }
 
     function refreshButtons() {
         document.querySelectorAll('.wlBookmarkBtn').forEach(function (btn) {
             var id = btn.getAttribute('data-wl-id');
-            var active = !!id && state.itemCats.has(id);
+            var series = btn.getAttribute('data-wl-series');
+            var active = (!!id && state.itemCats.has(id)) || (!!series && state.itemCats.has(series));
             setClass(btn, 'wlActive', active);
             var title = active ? t('onList') : t('add');
             if (btn.title !== title) btn.title = title;
